@@ -1,25 +1,19 @@
 import React from 'react';
 import {Card, CardImg, CardBody, CardHeader } from 'reactstrap';
-
+import {filterNutrients} from '../utils/helpers.js'
 
 const FoodCard = ( {food} ) => {
-    const nutrientList = food.foodNutrients;
-    
-    
-    const filteredNutrients =  nutrientList.filter( nutrient => nutrient.nutrientName === 'Protein');
-    console.log(food);
-
+    console.log(food)
+    const nutrientList = filterNutrients(food.foodNutrients)
+    console.log(nutrientList);
     return (<div>{food && 
         <Card outline color='secondary' >
             <CardHeader>{food.lowercaseDescription}</CardHeader>
                 <CardBody>
-                    {filteredNutrients.map(nutrient => (
-                        `${nutrient.nutrientName} : ${nutrient.value}`
-                    // Calories: {food.nf_calories} <tr />
-                    // Total Fat: {food.nf_total_fat} <tr />
-                    // Total Carb: {food.nf_total_carbohydrate}<tr />
-                    // Protein: {food.nf_protein}<tr />
-                    // Sodium {food.nf_sodium}<tr />
+                    {nutrientList.map(nutrient => (
+                        <div key={nutrientList.nutrientId}>
+                        {nutrient.nutrientName}: {nutrient.value}
+                        </div>
                     ))}
                 
             </CardBody>

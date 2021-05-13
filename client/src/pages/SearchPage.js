@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Card,
   CardBody,
@@ -12,10 +12,9 @@ import {
 } from 'reactstrap';
 import {FdcSearchFood} from '../utils/API.js';
 import FoodCard from '../components/FoodCard.js';
+
+
 const SearchPage = () => {
-  // useEffect(() => {
-  //   handleSearch('eggs');
-  // }, []);
   const [searchedFood, setSearchResult] = useState('');
   const [searchInput, setSearchInput] = useState('');
 
@@ -27,9 +26,9 @@ const SearchPage = () => {
         throw new Error('something went wrong!');
       }
 
-      const foods = await response.json();
-      console.log(foods);
-      setSearchResult(foods['foods']);
+      const data = await response.json();
+      console.log(data);
+      setSearchResult(data.foods);
       setSearchInput('');
     } catch (err) {
       console.error(err);
@@ -71,13 +70,14 @@ const SearchPage = () => {
               </Card>
               </Col>
               </Row>
-              <Row className="d-flex">
-                {searchedFood && searchedFood.map( food => (
-                <Col key={food.tags.tag_id} sm="4" md={{ size: 2, offset: 0}}  >
+              <Row>
+                {searchedFood && searchedFood.map( food => ( 
+                <Col key={food.fdcId} sm="4" md={{ size: 2, offset: 0}}>
                 <FoodCard
                   food={food}
-              />
-              </Col>))}
+                />
+                </Col>))}
+                
               </Row>
               
           
