@@ -16,9 +16,9 @@ import { fetchNatural } from '../utils/API';
 // import SearchResult from '../components/SearchResult'
 import SearchNatural from '../components/SearchNatural'
 const SearchPage = () => {
-  useEffect(() => {
-    handleSearch('eggs, bacon and waffles');
-  }, []);
+  // useEffect(() => {
+  //   handleSearch('eggs, bacon and waffles');
+  // }, []);
   const [searchedFood, setSearchResult] = useState('');
   const [searchInput, setSearchInput] = useState('');
 
@@ -33,7 +33,7 @@ const SearchPage = () => {
       const foods = await response.json();
       console.log(foods);
       setSearchResult(foods['foods']);//.common[0].photo.thumb);
-      setSearchInput('');
+      // setSearchInput('');
     } catch (err) {
       console.error(err);
     }
@@ -51,7 +51,7 @@ const SearchPage = () => {
     return (
       <div>
         <Row>
-          <Col sm="12" md={{ size: 4, offset: 3 }}>
+          <Col sm="12" md={{ size: 6, offset: 3 }}>
             <Card body inverse color="primary">
               <CardBody>
                 <Form onSubmit={handleFormSubmit}>
@@ -76,7 +76,7 @@ const SearchPage = () => {
               </Row>
               <Row className="d-flex">
                 {searchedFood && searchedFood.map( food => (
-                <Col key={food.tags.tag_id} sm="6" md={{ size: 2 }}  >
+                <Col key={food.tags.tag_id} sm="4" md={{ size: 2, offset: 0}}  >
                 <SearchNatural
                   food={food}
               />

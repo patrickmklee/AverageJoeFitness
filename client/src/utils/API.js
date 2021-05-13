@@ -18,3 +18,13 @@ export const fetchNatural = (query) => {
     "body": "{\"query\":\""+query+"\",\"timezone\":\"US/Eastern\"}"
     })
 }
+
+
+export const FdcSearchFood = (key, query) => {
+  fetch('https://api.nal.usda.gov/fdc/v1/foods/search', {
+    method: 'POST',
+    qs: {api_key: key},
+    headers: {'Content-Type': 'application/json'},
+    body: `{"query":${query},"dataType":["Foundation","SR Legacy"],"pageSize":25,"pageNumber":2,"sortBy":"dataType.keyword","sortOrder":"asc","brandOwner":"Kar Nut Products Company"}`
+  })
+}
