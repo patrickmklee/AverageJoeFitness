@@ -2,29 +2,26 @@ import React, { useState, useEffect } from 'react';
 import {
   Card,
   CardBody,
-  CardImg,
   Form,
   FormGroup,
   Label,
   Input,
   Row,
   Col,
-  CardHeader,
   Button
 } from 'reactstrap';
-import { fetchNatural } from '../utils/API';
-// import SearchResult from '../components/SearchResult'
-import SearchNatural from '../components/SearchNatural'
+import {FdcSearchFood} from '../utils/API.js';
+import FoodCard from '../components/FoodCard.js';
 const SearchPage = () => {
   // useEffect(() => {
-  //   handleSearch('eggs, bacon and waffles');
+  //   handleSearch('eggs');
   // }, []);
   const [searchedFood, setSearchResult] = useState('');
   const [searchInput, setSearchInput] = useState('');
 
   const handleSearch = async query => {
     try {
-      const response = await fetchNatural(query);
+      const response = await FdcSearchFood(process.env.REACT_APP_USDA_API_KEY, query);
 
       if (!response.ok) {
         throw new Error('something went wrong!');
@@ -32,8 +29,8 @@ const SearchPage = () => {
 
       const foods = await response.json();
       console.log(foods);
-      setSearchResult(foods['foods']);//.common[0].photo.thumb);
-      // setSearchInput('');
+      setSearchResult(foods['foods']);
+      setSearchInput('');
     } catch (err) {
       console.error(err);
     }
@@ -77,7 +74,7 @@ const SearchPage = () => {
               <Row className="d-flex">
                 {searchedFood && searchedFood.map( food => (
                 <Col key={food.tags.tag_id} sm="4" md={{ size: 2, offset: 0}}  >
-                <SearchNatural
+                <FoodCard
                   food={food}
               />
               </Col>))}
