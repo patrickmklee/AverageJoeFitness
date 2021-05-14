@@ -1,23 +1,25 @@
 import React from 'react';
-import {Card, CardImg, CardBody, CardHeader } from 'reactstrap';
-import {filterNutrients} from '../utils/helpers.js'
+import {Card, Button, CardBody, CardHeader } from 'reactstrap';
 
-const FoodCard = ( {food} ) => {
-    console.log(food)
-    const nutrientList = filterNutrients(food.foodNutrients)
-    console.log(nutrientList);
-    return (<div>{food && 
+const FoodCard = ( {fdcId, nutrientList, foodName, setFoodSelection} ) => {
+
+    const handleClick = async event => {
+    console.log(event.target);
+    setFoodSelection(fdcId);
+    };
+
+    return (<div>
         <Card outline color='secondary' >
-            <CardHeader>{food.lowercaseDescription}</CardHeader>
+            <CardHeader>{foodName}</CardHeader>
                 <CardBody>
                     {nutrientList.map(nutrient => (
                         <div key={nutrientList.nutrientId}>
                         {nutrient.nutrientName}: {nutrient.value}
                         </div>
                     ))}
-                
-            </CardBody>
-          </Card>}
+                <Button onClick={setFoodSelection}>Select</Button>
+                </CardBody>
+          </Card>
           </div>
     )
 };

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
+  Container,
   Card,
   CardBody,
   Form,
@@ -10,15 +11,21 @@ import {
   Col,
   Button
 } from 'reactstrap';
-import {FdcSearchFood} from '../utils/API.js';
-import FoodCard from '../components/FoodCard.js';
+import { useMutation } from '@apollo/react-hooks';
+import { ADD_FOOD } from '../utils/mutations';
 
+import {FdcSearchFood} from '../utils/API.js';
+import FoodResultDisplay from '../components/FoodResultDisplay.js'
 
 const SearchPage = () => {
   const [searchedFood, setSearchResult] = useState('');
   const [searchInput, setSearchInput] = useState('');
-
-  const handleSearch = async query => {
+  const [foodSelection, setFoodSelection] = useState('');
+  const [addFood, { error }] = useMutation(ADD_FOOD);
+  useEffect(() => {
+    document.title = `${foodSelection} fdcid`;
+  }, [foodSelection]);
+    const handleSearch = async query => {
     try {
       const response = await FdcSearchFood(process.env.REACT_APP_USDA_API_KEY, query);
 
@@ -46,6 +53,7 @@ const SearchPage = () => {
   };
     return (
       <div>
+      <Container>
         <Row>
           <Col sm="12" md={{ size: 6, offset: 3 }}>
             <Card body inverse color="primary">
@@ -70,21 +78,14 @@ const SearchPage = () => {
               </Card>
               </Col>
               </Row>
-              <Row>
-                {searchedFood && searchedFood.map( food => ( 
-                <Col key={food.fdcId} sm="4" md={{ size: 2, offset: 0}}>
-                <FoodCard
-                  food={food}
+          </Container>
+
+              <FoodResultDisplay 
+                setFoodSelection={setFoodSelection}
+                foodSelection={foodSelection}
+                searchedFood={searchedFood}
                 />
-                </Col>))}
-                
-              </Row>
-              
-          
-
-          
-
-      </div>
+</div>
     )}
 
   export default SearchPage;
