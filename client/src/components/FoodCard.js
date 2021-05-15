@@ -17,7 +17,7 @@ const FoodCard = ( {fdcId, nutrientList, foodName, setFoodSelection} ) => {
                         {nutrient.nutrientName}: {nutrient.value}
                         </div>
                     ))}
-                <Button onClick={setFoodSelection}>Select</Button>
+                <Button onClick={handleClick}>Select</Button>
                 </CardBody>
           </Card>
           </div>
