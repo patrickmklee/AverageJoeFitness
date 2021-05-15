@@ -5,6 +5,9 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
 import {MealProvider} from './utils/GlobalState'
 import SearchPage from './pages/SearchPage';
+import Home from './pages/Home';
+
+import Nav from './components/Nav';
 
 
 const client = new ApolloClient({
@@ -24,9 +27,14 @@ function App() {
     <ApolloProvider client={client}>
       <Router>
         <div>
+
+        <Nav />
         <MealProvider>
-        <SearchPage />
-        </MealProvider>
+            <Switch>
+            <Route exact path="/" component={SearchPage} />
+            <Route exact path="/addMeal" component={SearchPage} />
+            </Switch>
+            </MealProvider>
         </div>
       </Router>
       </ApolloProvider>

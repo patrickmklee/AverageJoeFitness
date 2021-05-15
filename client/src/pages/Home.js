@@ -15,7 +15,7 @@ const queryTimeline = () => {
 }
 const TimelinePage = () => {
 
-//const [state, dispatch] = useMealContext();
+const [state, dispatch] = useMealContext();
 // const {loading, error, data, } = useQuery(QUERY_TIMELINE);
 const [getTimeline, { data }] = useLazyQuery(QUERY_TIMELINE);
 

@@ -1,11 +1,11 @@
 import React from 'react';
-import { useMealContext } from "../utils/GlobalState";
-import {ADD_TO_MEAL} from "../utils/actions"
+import { useMealContext } from "../../utils/GlobalState";
+import {ADD_TO_MEAL} from "../../utils/actions"
 import {Card, Button, CardBody, CardHeader } from 'reactstrap';
-import {idbPromise} from "../utils/helpers"
-import {filterNutrients} from '../utils/helpers'
+import {idbPromise} from "../../utils/helpers"
+import {filterNutrients} from '../../utils/helpers'
 
-const FoodCard = ( item ) => {
+const FoodItem = ( item ) => {
     const [state, dispatch] = useMealContext();
     
 
@@ -47,4 +47,4 @@ const FoodCard = ( item ) => {
     )
 };
 
-export default FoodCard;
+export default FoodItem;

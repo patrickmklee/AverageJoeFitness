@@ -1,10 +1,10 @@
 import {React, useEffect} from 'react';
 
-import { useMealContext } from "../utils/GlobalState";
+import { useMealContext } from "../../utils/GlobalState";
 
-import {idbPromise} from "../utils/helpers"
-import {filterNutrients} from '../utils/helpers.js'
-import {UPDATE_FOODS_RESULTS, UPDATE_SEARCH_CRITERIA} from "../utils/actions"
+import {idbPromise} from "../../utils/helpers"
+import {filterNutrients} from '../../utils/helpers.js'
+import {UPDATE_FOODS_RESULTS, UPDATE_SEARCH_CRITERIA} from "../../utils/actions"
 import {Row,
   Col,
   Container

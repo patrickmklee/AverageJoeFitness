@@ -8,9 +8,9 @@ import { useQuery } from '@apollo/react-hooks';
 
 import {FdcSearchFood} from '../utils/API.js';
 // import FoodResultDisplay from '../components/FoodResultDisplay.js'
-import FoodCard from '../components/FoodCard.js';
+import FoodItem from '../components/FoodItem';
 import {filterNutrients} from '../utils/helpers';
-import TimelinePage from './TimelinePage.js';
+import TimelinePage from './Home.js';
 // import ModalConfirmSelection from '../components/ModalConfirmSelection';
 import {
   Container,
@@ -102,9 +102,6 @@ const SearchPage = () => {
       <div>
       <Container>
         <Row>
-          <TimelinePage />
-          </Row>
-        <Row>
           <Col sm="12" md={{ size: 6, offset: 3 }}>
             <Card body inverse color="primary">
               <CardBody>
@@ -137,7 +134,7 @@ const SearchPage = () => {
           {searchedFood.map( (food)  => ( 
         // <div key={food.fdcId} className='d-flex-inline'>
         // <Col sm="4" key={food.fdcId}>
-        <FoodCard
+        <FoodItem
         key={food.fdcId}
         className={`mt-2 body`}
         foodName={getDisplayName(food)}
