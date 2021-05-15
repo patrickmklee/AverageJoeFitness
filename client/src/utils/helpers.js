@@ -7,9 +7,11 @@ const nutrtientTable = {
     1093 : "Sodium"
 };
         
-const filters = new Set([1008,1003,1004,1005,1093]);
+const generateFilters = () => { return new Set([1008,1003,1004,1005,1093]) }
 
-export const filterNutrients = (foodNutrients) => foodNutrients.filter(({ nutrientId }) => filters.has(nutrientId));
+export const filterNutrients = (foodNutrients) => foodNutrients.filter(({ nutrientId }) => generateFilters().has(nutrientId));
+
+
 export function idbPromise(storeName, method, object) {
     return new Promise((resolve, reject) => {
       const request = window.indexedDB.open('average-joe-planner', 1);
