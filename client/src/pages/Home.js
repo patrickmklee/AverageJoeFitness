@@ -13,7 +13,7 @@ const getScheduleMeals = schedule => {
 const queryTimeline = () => {
   return QUERY_TIMELINE
 }
-const TimelinePage = () => {
+const Home = () => {
 
 const [state, dispatch] = useMealContext();
 // const {loading, error, data, } = useQuery(QUERY_TIMELINE);
@@ -53,4 +53,4 @@ const [getTimeline, { data }] = useLazyQuery(QUERY_TIMELINE);
     }
 
   
-    export default TimelinePage;
+    export default Home;

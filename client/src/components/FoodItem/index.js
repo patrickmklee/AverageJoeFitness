@@ -1,14 +1,12 @@
 import React from 'react';
 import { useMealContext } from "../../utils/GlobalState";
 import {ADD_TO_MEAL} from "../../utils/actions"
-import {Card, Button, CardBody, CardHeader } from 'reactstrap';
+import {Col, Card, Button, CardBody, CardHeader } from 'reactstrap';
 import {idbPromise} from "../../utils/helpers"
 import {filterNutrients} from '../../utils/helpers'
 
 const FoodItem = ( item ) => {
     const [state, dispatch] = useMealContext();
-    
-
     const {
         fdcId,
         foodName,
@@ -31,19 +29,20 @@ const FoodItem = ( item ) => {
     // setFoodSelection(fdcId);
     // };
 
-    return (<div>
+    return (
+    <Col sm="4">
         <Card outline color='secondary' >
             <CardHeader>{foodName} {fdcId}</CardHeader>
                 <CardBody>
-                    {filterNutrients(nutrientList).map(nutrient => (
-                        <div key={nutrient.nutrientId}>
-                        {nutrient.nutrientName}: {nutrient.value}
-                        </div>
-                    ))}
-                <Button onClick={addToMeal}>Select</Button>
+                {filterNutrients(nutrientList).map(nutrient => (
+                    <div key={nutrient.nutrientId}>
+                    {nutrient.nutrientName}: {nutrient.value}
+                    </div>
+                ))}
                 </CardBody>
-          </Card>
-          </div>
+            <Button onClick={addToMeal}>Select</Button>
+        </Card>
+    </Col>
     )
 };
 

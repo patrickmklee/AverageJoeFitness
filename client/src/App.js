@@ -6,7 +6,7 @@ import ApolloClient from 'apollo-boost';
 import {MealProvider} from './utils/GlobalState'
 import SearchPage from './pages/SearchPage';
 import Home from './pages/Home';
-
+import Login from './pages/Login';
 import Nav from './components/Nav';
 
 
@@ -27,14 +27,15 @@ function App() {
     <ApolloProvider client={client}>
       <Router>
         <div>
+        <MealProvider>
 
         <Nav />
-        <MealProvider>
             <Switch>
             <Route exact path="/" component={SearchPage} />
+            <Route exact path="/login" component={Login} />
             <Route exact path="/addMeal" component={SearchPage} />
             </Switch>
-            </MealProvider>
+        </MealProvider>
         </div>
       </Router>
       </ApolloProvider>

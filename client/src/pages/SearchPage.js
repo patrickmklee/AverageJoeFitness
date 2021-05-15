@@ -126,11 +126,9 @@ const SearchPage = () => {
               </Col>
               </Row>
           </Container>
-              
-              (
         <Container fluid>
         {searchedFood.length ? (
-        <Row>  
+        <Row>
           {searchedFood.map( (food)  => ( 
         // <div key={food.fdcId} className='d-flex-inline'>
         // <Col sm="4" key={food.fdcId}>
