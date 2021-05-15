@@ -4,7 +4,7 @@ const timelineSchema = new Schema(
   {
     username: {
       type: String,
-      required: true,
+      ref: 'User'
     },
     schedule: [
       {
@@ -24,18 +24,16 @@ const timelineSchema = new Schema(
             }
           }
         ],
-        exercise: [
-          {
-            category: {
-              type: String,
-              required: true
-            },
-            duration: {
-              type: Number,
-              required: true
-            }
+        exercise: {
+          category: {
+            type: String,
+            required: true
+          },
+          duration: {
+            type: Number,
+            required: true
           }
-        ]
+        }
       }
     ]
   },

@@ -21,8 +21,12 @@ const resolvers = {
       return Timeline.find(params).sort({ createdAt: -1 });
     },
 
-    timeline: async (parent, { _id }) => {
-      return Timeline.findOne({ _id });
+    timeline: async (parent, args, context) => {
+      if (context.user) {
+        return await Timeline.findOne({ username: context.user.username })
+      }
+
+      throw new AuthenticationError("Not logged in");
     },
 
     users: async () => {
@@ -43,6 +47,14 @@ const resolvers = {
       const user = await User.create(args);
       const token = signToken(user);
 
+      const timeline = await Timeline.create({ ...args, username: user.username });
+  
+      await User.findByIdAndUpdate(
+        { _id: user._id },
+        { timeline: timeline._id },
+        { new: true }
+      );
+  
       return { token, user };
     },
 

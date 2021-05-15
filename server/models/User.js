@@ -35,12 +35,11 @@ const userSchema = new Schema(
     activityLvl: {
       type: Number
     },
-    timeline: [
+    timeline:
       {
         type: Schema.Types.ObjectId,
         ref: 'Timeline'
       }
-    ]
   },
   {
     toJSON: {
@@ -80,7 +79,10 @@ userSchema.virtual('optimalCalories').get(function() {
   else {
     var calories = ((66.473 + (13.7516 * calWeight)) + (5.0033 * calHeight)) - (6.755 * this.age);
   }
-  return calories * (1 + (this.activityLvl * 0.1));
+  console.log(Math.round(calories * (1 + (this.activityLvl * 0.1))));
+  console.log(calories);
+  console.log(this.activityLvl);
+  return Math.round(calories * (1 + (this.activityLvl * 0.1)));
 });
 
 const User = model('User', userSchema);

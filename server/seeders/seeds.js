@@ -3,9 +3,21 @@ const { Timeline, User } = require('../models');
 
 db.once('open', async () => {
   await Timeline.deleteMany({});
+  await User.deleteMany({});
 
-  await Timeline.create({
+  const user = await User.create({
     username: "bob",
+    email: "bob@mail.com",
+    password: "password",
+    height: "30",
+    weight: "120",
+    age: "27",
+    gender: "M",
+    activityLvl: 3
+  });
+
+  timeline = await Timeline.create({
+    username: user.username,
     schedule: [
       {
         time: "8am",
@@ -15,24 +27,28 @@ db.once('open', async () => {
             calories: 500
           }
         ],
-        exercise: [
+        exercise:
           {
             category: "run",
             duration: 50
           }
-        ]
       },
       {
         time: "10am",
-        exercise: [
+        exercise:
           {
             category: "run",
             duration: 35
           }
-        ]
       }
     ]
   });
+
+  await User.findByIdAndUpdate(
+    { _id: user._id },
+    { timeline: timeline._id },
+    { new: true }
+  );
 
   console.log('all done!');
   process.exit(0);

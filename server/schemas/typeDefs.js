@@ -11,7 +11,7 @@ const typeDefs = gql`
   type Schedule {
     time: String
     meal: [Meal]
-    exercise: [Exercise]
+    exercise: Exercise
   }
 
   type Meal {
@@ -28,7 +28,11 @@ const typeDefs = gql`
     _id: ID
     username: String
     email: String
-    timeline: [Timeline]
+    height: Int
+    weight: Int
+    Age: Int
+    optimalCalories: Int
+    timeline: Timeline
   }
 
   type Auth {
@@ -41,13 +45,17 @@ const typeDefs = gql`
     users: [User]
     user(username: String!): User
     timelines(username: String): [Timeline]
-    timeline(_id: ID!): Timeline
+    timeline: Timeline
   }
 
   type Mutation {
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
     addTimeline(username: String!): Timeline
+    updateMeal(username: String!): Timeline
+    deleteMeal(username: String!): Timeline
+    updateExercise(username: String!, time: String): Timeline
+    deleteExercise(username: String!, time: String): Timeline
   }
 `;
 
