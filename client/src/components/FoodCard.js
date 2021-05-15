@@ -1,23 +1,46 @@
 import React from 'react';
+import { useMealContext } from "../utils/GlobalState";
+import {ADD_TO_MEAL} from "../utils/actions"
 import {Card, Button, CardBody, CardHeader } from 'reactstrap';
+import {idbPromise} from "../utils/helpers"
+import {filterNutrients} from '../utils/helpers'
 
-const FoodCard = ( {fdcId, nutrientList, foodName, setFoodSelection} ) => {
+const FoodCard = ( item ) => {
+    const [state, dispatch] = useMealContext();
+    
 
-    const handleClick = async event => {
-    console.log(event.target);
-    setFoodSelection(fdcId);
-    };
+    const {
+        fdcId,
+        foodName,
+        nutrientList,
+    } = item;
+
+    // const nutritionData = nutrientList.map(food => `${food.fdcId} : ${filterNutrients(food)}`);
+    const addToMeal = () => {
+          dispatch({
+            type: ADD_TO_MEAL,
+            food: {...item}
+            // product: { ...item, purchaseQuantity: 1 }
+          });
+          idbPromise('meal', 'put',  {...item });
+        }
+      
+
+    // const handleClick = async event => {
+    // console.log(event.target);
+    // setFoodSelection(fdcId);
+    // };
 
     return (<div>
         <Card outline color='secondary' >
-            <CardHeader>{foodName}</CardHeader>
+            <CardHeader>{foodName} {fdcId}</CardHeader>
                 <CardBody>
-                    {nutrientList.map(nutrient => (
-                        <div key={nutrientList.nutrientId}>
+                    {filterNutrients(nutrientList).map(nutrient => (
+                        <div key={nutrient.nutrientId}>
                         {nutrient.nutrientName}: {nutrient.value}
                         </div>
                     ))}
-                <Button onClick={handleClick}>Select</Button>
+                <Button onClick={addToMeal}>Select</Button>
                 </CardBody>
           </Card>
           </div>

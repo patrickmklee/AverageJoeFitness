@@ -3,7 +3,7 @@ import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
-
+import {MealProvider} from './utils/GlobalState'
 import SearchPage from './pages/SearchPage';
 
 
@@ -22,7 +22,13 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
-      <SearchPage />
+      <Router>
+        <div>
+        <MealProvider>
+        <SearchPage />
+        </MealProvider>
+        </div>
+      </Router>
       </ApolloProvider>
   );
 }
