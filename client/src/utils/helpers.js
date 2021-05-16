@@ -10,6 +10,12 @@ const nutrtientTable = {
 const generateFilters = () => { return new Set([1008,1003,1004,1005,1093]) }
 
 export const filterNutrients = (foodNutrients) => foodNutrients.filter(({ nutrientId }) => generateFilters().has(nutrientId));
+export function pluralize(name, count) {
+  if (count === 1) {
+    return name
+  }
+  return name + 's'
+}
 
 
 export function idbPromise(storeName, method, object) {

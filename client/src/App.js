@@ -1,13 +1,18 @@
 import React from 'react';
-import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
-import {MealProvider} from './utils/GlobalState'
-import SearchPage from './pages/SearchPage';
+
+
 import Home from './pages/Home';
+import SearchPage from './pages/SearchPage';
+import NoMatch from "./pages/NoMatch";
+
 import Login from './pages/Login';
 import Nav from './components/Nav';
+
+import {MealProvider} from './utils/GlobalState'
+
 
 
 const client = new ApolloClient({
