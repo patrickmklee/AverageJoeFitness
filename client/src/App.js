@@ -31,7 +31,7 @@ function App() {
 
         <Nav />
             <Switch>
-            <Route exact path="/" component={SearchPage} />
+            <Route exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/addMeal" component={SearchPage} />
             </Switch>

@@ -2,22 +2,26 @@ import gql from 'graphql-tag';
 
 
 export const QUERY_TIMELINE = gql`
-query getTimeline($_id  : [ID]!) {
-    timeline( _id : $_id ) {
-        schedule {
-            time
-            meal {
-            itemName
-            calories
-            }
+  query me {
+    timeline {
+      _id
+      schedule {
+        time
+        meal {
+          itemName
+          calories
         }
+        exercise {
+          category
+          duration
+        }
+      }
     }
-}
-`;
-export const QUERY_USER = gql`
-{
-  user {
-    username
   }
+`;
+
+export const QUERY_ME = gql`
+query me {
+  _id
 }
 `;

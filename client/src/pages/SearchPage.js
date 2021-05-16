@@ -134,6 +134,7 @@ const SearchPage = () => {
         // <Col sm="4" key={food.fdcId}>
         <FoodItem
         key={food.fdcId}
+        // _id={
         className={`mt-2 body`}
         foodName={getDisplayName(food)}
         nutrientList={food.foodNutrients}
