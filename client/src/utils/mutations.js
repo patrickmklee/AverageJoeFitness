@@ -11,7 +11,9 @@ export const LOGIN_USER = gql`
     }
   }
 `;
-
+// export const ADD_MEAL = gql`
+//   mutation addMeal
+//   `;
 export const ADD_FOOD = gql`
   mutation addFood($itemName: String!) {
     addFood(itemName: $itemName){

@@ -20,6 +20,7 @@ export const QUERY_TIMELINE = gql`
   }
 `;
 
+
 export const QUERY_ME = gql`
 query me {
   _id

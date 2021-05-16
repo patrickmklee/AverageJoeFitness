@@ -129,18 +129,19 @@ const SearchPage = () => {
         <Container fluid>
         {searchedFood.length ? (
         <Row>
-          {searchedFood.map( (food)  => ( 
+          {searchedFood.map( (food,index)  => ( 
         // <div key={food.fdcId} className='d-flex-inline'>
         // <Col sm="4" key={food.fdcId}>
         <FoodItem
-        key={food.fdcId}
-        // _id={
-        className={`mt-2 body`}
-        foodName={getDisplayName(food)}
-        nutrientList={food.foodNutrients}
-        fdcId={food.fdcId}
-        // setFoodSelection={setFoodSelection}
+          key={index}
+          _id={food.fdcId}
+          className={`mt-2`}
+          fdcId={food.fdcId}
+          foodName={food.foodName}
+          displayName={getDisplayName(food)}
+          foodNutrients={food.foodNutrients}
         />
+        
         // </Col>
         ))}
         </Row>

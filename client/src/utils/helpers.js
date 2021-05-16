@@ -1,15 +1,21 @@
 
-const nutrtientTable = {
+const nutrientIdToCommonName = {
     1008 : "Calories",
     1004 : "Total fat",
     1005 : "Carbohydrate",
     1003 : "Protein",
     1093 : "Sodium"
 };
-        
-const generateFilters = () => { return new Set([1008,1003,1004,1005,1093]) }
 
-export const filterNutrients = (foodNutrients) => foodNutrients.filter(({ nutrientId }) => generateFilters().has(nutrientId));
+export const convertNutrientName = nutrient => { 
+  const id = nutrient.nutrientId;
+  nutrient.nutrientName = nutrientIdToCommonName[id]
+  return nutrient
+};
+// const generateFilters = () => { return new Set([1008,1003,1004,1005,1093]) }s
+export const generateFilters = filters =>  { return new Set(filters)} ;
+// ,1003,1004,1005,1093]) }
+export const filterNutrients = (foodNutrients) => foodNutrients.filter(({ nutrientId }) => generateFilters([1008,1003,1004,1005,1093]).has(nutrientId));
 
 
 export function idbPromise(storeName, method, object) {
@@ -18,7 +24,7 @@ export function idbPromise(storeName, method, object) {
       let db, tx, store;
       request.onupgradeneeded = function(e) {
         const db = request.result;
-        db.createObjectStore('meal', { keyPath: '_id' });
+        db.createObjectStore('meal', { keyPath: 'fdcId' });
         db.createObjectStore('foods', { keyPath: '_id' });
 
       };
