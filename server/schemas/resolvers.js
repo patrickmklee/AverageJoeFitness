@@ -179,6 +179,25 @@ const resolvers = {
       throw new AuthenticationError('Not logged in');
     },
 
+    deleteMeal: async (parent, args, context) => {
+      if (context.user) {
+        mealData = await Timeline.findOneAndUpdate(
+          { username: context.user.username },
+          // { $pull:  { "date.$[i].schedule.$[j].meal": {} } },
+          { $unset: { "date.$[i].schedule.$[j].meal": "" } },
+          {
+            new: true,
+            multi: true,
+            arrayFilters: [{ "i.day": args.date}, {"j.time": args.time}]
+          }
+        );
+
+        return mealData;
+      }
+
+      throw new AuthenticationError('Not logged in');
+    },
+
     addExercise: async (parent, args, context) => {
       if (context.user) {
         userDate = await Timeline.findOne({
@@ -250,7 +269,26 @@ const resolvers = {
       }
     
       throw new AuthenticationError('Not logged in');
-    }
+    },
+
+    deleteExercise: async (parent, args, context) => {
+      if (context.user) {
+        excerciseData = await Timeline.findOneAndUpdate(
+          { username: context.user.username },
+          // { $set: { "date.$[i].schedule.$[j].exercise": {} } },
+          { $unset: { "date.$[i].schedule.$[j].exercise": "" } },
+          {
+            new: true,
+            multi: true,
+            arrayFilters: [{ "i.day": args.date}, {"j.time": args.time}]
+          }
+        );
+
+        return excerciseData;
+      }
+
+      throw new AuthenticationError('Not logged in');
+    },
   }
 };
 
