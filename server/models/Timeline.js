@@ -6,34 +6,44 @@ const timelineSchema = new Schema(
       type: String,
       ref: 'User'
     },
-    schedule: [
+    date: [
       {
-        time: {
+        day: {
           type: String,
-          required: true
+          required: true,
+          unique: true,
         },
-        meal: [
+        schedule: [
           {
-            itemName: {
+            time: {
               type: String,
-              required: true
+              required: true,
+              unique: true,
             },
-            calories: {
-              type: Number,
-              required: true
+            meal: [
+              {
+                itemName: {
+                  type: String,
+                  required: true
+                },
+                calories: {
+                  type: Number,
+                  required: true
+                }
+              }
+            ],
+            exercise: {
+              category: {
+                type: String,
+                required: true
+              },
+              duration: {
+                type: Number,
+                required: true
+              }
             }
           }
-        ],
-        exercise: {
-          category: {
-            type: String,
-            required: true
-          },
-          duration: {
-            type: Number,
-            required: true
-          }
-        }
+        ]
       }
     ]
   },
