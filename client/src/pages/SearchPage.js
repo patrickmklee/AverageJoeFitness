@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import { useMealContext } from "../utils/GlobalState";
+import { useScheduleContext } from "../utils/GlobalState";
 
 
 import { useMutation } from '@apollo/react-hooks';
@@ -10,7 +10,6 @@ import {FdcSearchFood} from '../utils/API.js';
 // import FoodResultDisplay from '../components/FoodResultDisplay.js'
 import FoodItem from '../components/FoodItem';
 import {filterNutrients} from '../utils/helpers';
-import TimelinePage from './Home.js';
 // import ModalConfirmSelection from '../components/ModalConfirmSelection';
 import {
   Container,
@@ -30,7 +29,7 @@ import { idbPromise } from '../utils/helpers';
 const getDisplayName = (food) => { return `${food.dataType === 'Branded' && food.brandName ? food.brandName : ''} ${food.description}`}
 
 const SearchPage = () => {
-  const [state, dispatch] = useMealContext();
+  const [state, dispatch] = useScheduleContext();
   // const { searchCriteria } = state;
 
   const [searchedFood, setSearchResult] = useState('');
@@ -100,10 +99,9 @@ const SearchPage = () => {
   };
     return (
       <div>
-      <Container>
-        <Row>
-          <Col sm="12" md={{ size: 6, offset: 3 }}>
-            <Card body inverse color="primary">
+        <Container>
+          <Col sm="12" md={{ size:6, offset: 3 }}>
+            <Card color="primary">
               <CardBody>
                 <Form onSubmit={handleFormSubmit}>
                   <FormGroup>
@@ -124,9 +122,8 @@ const SearchPage = () => {
                 </CardBody>
               </Card>
               </Col>
-              </Row>
-          </Container>
-        <Container fluid>
+          
+          
         {searchedFood.length ? (
         <Row>
           {searchedFood.map( (food,index)  => ( 
@@ -145,11 +142,13 @@ const SearchPage = () => {
         // </Col>
         ))}
         </Row>
+        
         ) : (
         <p>You haven't added any products yet!</p>
     )}
         </Container>
-    </div>
+
+</div>
     )}
 
   export default SearchPage;

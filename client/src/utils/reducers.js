@@ -1,9 +1,14 @@
 import { useReducer } from "react";
 import {
-    ADD_TO_MEAL,
     UPDATE_FOODS_RESULTS,
-    UPDATE_SEARCH_CRITERIA
-} from "./actions";
+    UPDATE_SEARCH_CRITERIA,
+    ADD_TO_MEAL,
+    ADD_MULTIPLE_TO_MEAL,
+    REMOVE_FROM_MEAL,
+    UPDATE_MEAL_QUANTITY,
+    CLEAR_MEAL,
+    TOGGLE_MEAL
+  } from './actions';
 
 export const reducer = (state, action) => {
   switch (action.type) {
@@ -29,6 +34,6 @@ export const reducer = (state, action) => {
   }
 };
 
-export function useMealReducer(initialState) {
+export function useScheduleReducer(initialState) {
   return useReducer(reducer, initialState)
 }

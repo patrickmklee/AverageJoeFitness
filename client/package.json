@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "mern-client",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:3001/",
@@ -29,10 +29,7 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "extends": "react-app"
   },
   "browserslist": {
     "production": [

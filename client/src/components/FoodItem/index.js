@@ -1,6 +1,5 @@
-import React, {useEffect} from 'react';
-import dayjs from 'dayjs';
-import { useMealContext } from "../../utils/GlobalState";
+import React from 'react';
+import { useScheduleContext } from "../../utils/GlobalState";
 import {ADD_TO_MEAL} from "../../utils/actions"
 import {Col, Card, Button, CardBody, CardHeader } from 'reactstrap';
 import {idbPromise} from "../../utils/helpers"
@@ -10,7 +9,7 @@ import { ADD_MEAL } from '../../utils/mutations';
 import {filterNutrients, convertNutrientName} from '../../utils/helpers'
 
 const FoodItem = ( item ) => {
-    const [state, dispatch] = useMealContext();
+    const [state, dispatch] = useScheduleContext();
     const {
         _id,
         fdcId,

@@ -1,13 +1,20 @@
 import React from 'react';
-import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
-import {MealProvider} from './utils/GlobalState'
-import SearchPage from './pages/SearchPage';
+
+
 import Home from './pages/Home';
-import Login from './pages/Login';
+import SearchPage from './pages/SearchPage';
+
+import NoMatch from "./pages/NoMatch";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Timeline from './pages/Timeline';
 import Nav from './components/Nav';
+
+import {ScheduleProvider} from './utils/GlobalState'
+
 
 
 const client = new ApolloClient({
@@ -27,15 +34,19 @@ function App() {
     <ApolloProvider client={client}>
       <Router>
         <div>
-        <MealProvider>
+        <ScheduleProvider>
 
         <Nav />
             <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={Signup} />
+            <Route exact path="/timeline" component={Timeline} />
             <Route exact path="/addMeal" component={SearchPage} />
+            <Route component={NoMatch} />
+
             </Switch>
-        </MealProvider>
+        </ScheduleProvider>
         </div>
       </Router>
       </ApolloProvider>
