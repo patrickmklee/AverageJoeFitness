@@ -18,28 +18,40 @@ db.once('open', async () => {
 
   timeline = await Timeline.create({
     username: user.username,
-    schedule: [
+    date: [
       {
-        time: "8am",
-        meal: [
+        day: "02-13-2021",
+        schedule: [
           {
-            itemName: "burger",
-            calories: 500
+            time: "8:00pm",
+            meal: [
+              {
+                itemName: "burger",
+                calories: 500
+              }
+            ],
+            exercise: {
+              category: "run",
+              duration: 50
+            }
           }
-        ],
-        exercise:
-          {
+        ]
+      },
+      {
+        day: "02-15-2021",
+        schedule: {
+          time: "6:00am",
+          meal: [
+            {
+              itemName: "burger",
+              calories: 500
+            }
+          ],
+          exercise: {
             category: "run",
             duration: 50
           }
-      },
-      {
-        time: "10am",
-        exercise:
-          {
-            category: "run",
-            duration: 35
-          }
+        }
       }
     ]
   });

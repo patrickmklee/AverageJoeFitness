@@ -75,20 +75,150 @@ const resolvers = {
       return { token, user };
     },
 
-    addTimeline: async (parent, args, context) => {
+    addMeal: async (parent, args, context) => {
       if (context.user) {
-        const timeline = await Timeline.create({ ...args, username: context.user.username });
-    
-        await User.findByIdAndUpdate(
-          { _id: context.user._id },
-          { $push: { timeline: timeline._id } },
-          { new: true }
+        userDate = await Timeline.findOne({
+          username: context.user.username,
+          date: {
+            $elemMatch: {
+              day: args.date
+            }
+          }
+        })
+
+        // console.log(userDate);
+        if(userDate === null) {
+          // console.log("DATE DOES NOT EXIST")
+          mealData = await Timeline.findOneAndUpdate(
+            { username: context.user.username },
+            { $addToSet: { date: { day: args.date, schedule: [{time: args.time, meal: args.meal}]} }},
+            {
+              new: true,
+              // multi: true,
+              // arrayFilters: [{ "i.day": args.date}, {"j.time": args.time,}]
+            }
+          );
+          return mealData;
+        }
+        
+        // console.log("DATE EXISTS");
+
+        userTime = await Timeline.findOne({
+          username: context.user.username,
+          date: {
+            $elemMatch: {
+              day: args.date,
+              schedule: {
+                $elemMatch: {
+                  time: args.time
+                }
+              }
+            }
+          }
+        })
+
+        if(userTime === null) {
+          // console.log("TIME DOES NOT EXIST");
+          mealData = await Timeline.findOneAndUpdate(
+            { username: context.user.username },
+            { $addToSet: { "date.$[i].schedule": [{time: args.time, meal: args.meal}] }},
+            {
+              new: true,
+              multi: true,
+              arrayFilters: [{ "i.day": args.date}]
+            }
+          );
+          return mealData;
+        }
+
+        // console.log("TIME EXISTS")
+        mealData = await Timeline.findOneAndUpdate(
+          { username: context.user.username },
+          { $set: { "date.$[i].schedule.$[j].meal": args.meal }},
+          {
+            new: true,
+            multi: true,
+            arrayFilters: [{ "i.day": args.date}, {"j.time": args.time}]
+          }
         );
-    
-        return timeline;
+
+        return mealData;
       }
     
-      throw new AuthenticationError('You need to be logged in!');
+      throw new AuthenticationError('Not logged in');
+    },
+
+    addExercise: async (parent, args, context) => {
+      if (context.user) {
+        userDate = await Timeline.findOne({
+          username: context.user.username,
+          date: {
+            $elemMatch: {
+              day: args.date
+            }
+          }
+        })
+
+        // console.log(userDate);
+        if(userDate === null) {
+          console.log("DATE DOES NOT EXIST")
+          exerciseData = await Timeline.findOneAndUpdate(
+            { username: context.user.username },
+            { $addToSet: { date: { day: args.date, schedule: [{time: args.time, exercise: args.exercise}]} }},
+            {
+              new: true,
+              // multi: true,
+              // arrayFilters: [{ "i.day": args.date}, {"j.time": args.time,}]
+            }
+          );
+          return exerciseData;
+        }
+        
+        // console.log("DATE EXISTS");
+
+        userTime = await Timeline.findOne({
+          username: context.user.username,
+          date: {
+            $elemMatch: {
+              day: args.date,
+              schedule: {
+                $elemMatch: {
+                  time: args.time
+                }
+              }
+            }
+          }
+        })
+
+        if(userTime === null) {
+          // console.log("TIME DOES NOT EXIST");
+          exerciseData = await Timeline.findOneAndUpdate(
+            { username: context.user.username },
+            { $addToSet: { "date.$[i].schedule": [{time: args.time, exercise: args.exercise}] }},
+            {
+              new: true,
+              multi: true,
+              arrayFilters: [{ "i.day": args.date}]
+            }
+          );
+          return exerciseData;
+        }
+
+        // console.log("TIME EXISTS")
+        exerciseData = await Timeline.findOneAndUpdate(
+          { username: context.user.username },
+          { $set: { "date.$[i].schedule.$[j].exercise": args.exercise }},
+          {
+            new: true,
+            multi: true,
+            arrayFilters: [{ "i.day": args.date}, {"j.time": args.time}]
+          }
+        );
+
+        return exerciseData;
+      }
+    
+      throw new AuthenticationError('Not logged in');
     }
   }
 };
