@@ -11,6 +11,7 @@ const ScheduleProvider = ({ value = [], ...props }) => {
     meal: [],
     mealOpen: false,
     searchCriteria: '',
+    timeline: [],
   });
 
   return <Provider value={[state, dispatch]} {...props} />;

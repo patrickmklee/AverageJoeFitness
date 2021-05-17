@@ -1,4 +1,7 @@
 
+import dayjs from 'dayjs'
+
+
 const nutrientIdToCommonName = {
     1008 : "Calories",
     1004 : "Total fat",
@@ -6,6 +9,7 @@ const nutrientIdToCommonName = {
     1003 : "Protein",
     1093 : "Sodium"
 };
+export const getDate = () => { return dayjs() };
 
 export const convertNutrientName = nutrient => { 
   const id = nutrient.nutrientId;
@@ -20,12 +24,13 @@ export const filterNutrients = (foodNutrients) => foodNutrients.filter(({ nutrie
 
 export function idbPromise(storeName, method, object) {
     return new Promise((resolve, reject) => {
-      const request = window.indexedDB.open('average-joe-planner', 1);
+      const request = window.indexedDB.open('average-joe-planner', 3);
       let db, tx, store;
       request.onupgradeneeded = function(e) {
         const db = request.result;
-        db.createObjectStore('meal', { keyPath: 'fdcId' });
-        db.createObjectStore('foods', { keyPath: '_id' });
+        db.createObjectStore('meal', { keyPath: '_id' });
+        db.createObjectStore('foods', { keyPath: 'fdcId' });
+        db.createObjectStore('timeline', { keyPath: '_id' });
 
       };
   

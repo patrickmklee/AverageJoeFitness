@@ -6,83 +6,81 @@ import { ADD_USER } from "../utils/mutations";
 
 function Signup(props) {
   const [formState, setFormState] = useState({ email: '', password: '' });
-  const [addUser] = useMutation(ADD_USER);
-
-  const handleFormSubmit = async event => {
-    event.preventDefault();
-    const mutationResponse = await addUser({
-      variables: {
-        email: formState.email, password: formState.password,
-        firstName: formState.firstName, lastName: formState.lastName
-      }
-    });
-    const token = mutationResponse.data.addUser.token;
-    Auth.login(token);
-  };
+  const [addUser, { error }] = useMutation(ADD_USER);
 
   const handleChange = event => {
     const { name, value } = event.target;
+
     setFormState({
       ...formState,
       [name]: value
     });
   };
 
+  // submit form
+  const handleFormSubmit = async event => {
+    event.preventDefault();
+
+    try {
+      const { data } = await addUser({
+        variables: { ...formState }
+      });
+
+      Auth.login(data.addUser.token);
+    } catch (e) {
+      console.error(e);
+    }
+  };
   return (
     <div className="container my-1">
+      <div className="col-12 col-md-6">
+
       <Link to="/login">
         ← Go to Login
       </Link>
+      </div>
+      <div className="col-12 col-md-6">
+        <div className="card">
+          <h4 className="card-header">Sign Up</h4>
+          <div className="card-body">
+            <form onSubmit={handleFormSubmit}>
+              <input
+                className="form-input"
+                placeholder="Your username"
+                name="username"
+                type="username"
+                id="username"
+                value={formState.username}
+                onChange={handleChange}
+              />
+              <input
+                className="form-input"
+                placeholder="Your email"
+                name="email"
+                type="email"
+                id="email"
+                value={formState.email}
+                onChange={handleChange}
+              />
+              <input
+                className="form-input"
+                placeholder="******"
+                name="password"
+                type="password"
+                id="password"
+                value={formState.password}
+                onChange={handleChange}
+              />
+              <button className="btn d-block w-100" type="submit">
+                Submit
+              </button>
+            </form>
 
-      <h2>Signup</h2>
-      <form onSubmit={handleFormSubmit}>
-        <div className="flex-row space-between my-2">
-          <label htmlFor="firstName">First Name:</label>
-          <input
-            placeholder="First"
-            name="firstName"
-            type="firstName"
-            id="firstName"
-            onChange={handleChange}
-          />
+            {error && <div>Signup failed</div>}
+          </div>
         </div>
-        <div className="flex-row space-between my-2">
-          <label htmlFor="lastName">Last Name:</label>
-          <input
-            placeholder="Last"
-            name="lastName"
-            type="lastName"
-            id="lastName"
-            onChange={handleChange}
-          />
-        </div>
-        <div className="flex-row space-between my-2">
-          <label htmlFor="email">Email:</label>
-          <input
-            placeholder="youremail@test.com"
-            name="email"
-            type="email"
-            id="email"
-            onChange={handleChange}
-          />
-        </div>
-        <div className="flex-row space-between my-2">
-          <label htmlFor="pwd">Password:</label>
-          <input
-            placeholder="******"
-            name="password"
-            type="password"
-            id="pwd"
-            onChange={handleChange}
-          />
-        </div>
-        <div className="flex-row flex-end">
-          <button type="submit">
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
+      </div>
+      </div>
   );
 
 }

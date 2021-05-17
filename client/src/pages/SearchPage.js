@@ -5,6 +5,7 @@ import { useScheduleContext } from "../utils/GlobalState";
 import { useMutation } from '@apollo/react-hooks';
 import { ADD_FOOD } from '../utils/mutations';
 import { useQuery } from '@apollo/react-hooks';
+import Auth from '../utils/auth';
 
 import {FdcSearchFood} from '../utils/API.js';
 // import FoodResultDisplay from '../components/FoodResultDisplay.js'
@@ -23,23 +24,43 @@ import {
   Col,
   Button
 } from 'reactstrap';
-import { UPDATE_SEARCH_CRITERIA, UPDATE_FOODS_RESULTS } from '../utils/actions';
+import { UPDATE_SEARCH_CRITERIA, UPDATE_FOODS_RESULTS, UPDATE_TIMELINE } from '../utils/actions';
+import { QUERY_ME_BASIC, QUERY_ME, QUERY_TIMELINE } from '../utils/queries';
+
 import { idbPromise } from '../utils/helpers';
 
 const getDisplayName = (food) => { return `${food.dataType === 'Branded' && food.brandName ? food.brandName : ''} ${food.description}`}
 
 const SearchPage = () => {
   const [state, dispatch] = useScheduleContext();
-  // const { searchCriteria } = state;
+  const { meal } = state;
 
   const [searchedFood, setSearchResult] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [foodSelection, setFoodSelection] = useState('');
   const [currentSearch, setCurrentSearch] = useState('');
   
-  const [addFood, { error }] = useMutation(ADD_FOOD);
-  // const { loading, data } = useQuery(QUERY_PRODUCTS);
+  // const [addFood, { error }] = useMutation(ADD_FOOD);
+  const { loading, data } = useQuery(QUERY_TIMELINE);
 
+  // useEffect(() => {
+  //   if(data) {
+  //     dispatch({
+  //          type: UPDATE_PRODUCTS,
+  //         products: data.products
+  //       });
+  //       data.products.forEach((product) => {
+  //         idbPromise('products', 'put', product);
+  //       });
+  //   } else if (!loading) {
+  //     idbPromise('products', 'get').then((products) => {
+  //       dispatch({
+  //         type: UPDATE_PRODUCTS,
+  //        products: products
+  //      });
+  //     });
+  //   }
+  // }, [data, loading, dispatch]);
   // // useEffect(() => {
   // //   document.title = `${foodSelection} fdcid`;
   // // }, [foodSelection]);
@@ -64,14 +85,32 @@ const SearchPage = () => {
   // }, [data, loading, dispatch]);
 
 
-    
-    // useEffect(() => {
-    //   dispatch({
-    //     type: UPDATE_FOODS_RESULTS,
-    //     foods: searchedFood
-    //   })
-    //   }, [currentSearch]
-    //   );
+    // const foods = searchedFood?.foods||[];
+    useEffect(() => {
+      console.log(state);
+      if (searchedFood) {
+        console.log(searchedFood);
+        
+        dispatch({
+        type: UPDATE_FOODS_RESULTS,
+        foods: searchedFood.foods,
+        searchCriteria: searchedFood.foodSearchCritera
+        })
+        searchedFood.foods.forEach((food) => {
+                idbPromise('foods', 'put', food);
+        });
+      
+      // } else  {
+      //   idbPromise('foods', 'get').then((foods) => {
+      //     dispatch({
+      //         type: UPDATE_FOODS_RESULTS,
+      //         foods: foods,
+      //         // searchCriteria: searchedFood.foodSearchCritera
+      //     });
+      //   });
+      }}
+      , [searchedFood, dispatch]);
+      
     const handleSearch = async query => {
       try {
       const response = await FdcSearchFood(process.env.REACT_APP_USDA_API_KEY, query);
@@ -82,8 +121,7 @@ const SearchPage = () => {
 
       const data = await response.json();
       console.log(data);
-      setCurrentSearch(query);
-      setSearchResult(data.foods);
+      setSearchResult(data);
       // setSearchInput('');
     } catch (err) {
       console.error(err);
@@ -95,15 +133,18 @@ const SearchPage = () => {
     if (!searchInput) {
       return false;
     } 
+    setCurrentSearch(searchInput);
+
     handleSearch(searchInput);
   };
     return (
       <div>
         <Container>
+          <Row className="row">
           <Col sm="12" md={{ size:6, offset: 3 }}>
-            <Card color="primary">
+            <Card spacing-three color="primary">
               <CardBody>
-                <Form onSubmit={handleFormSubmit}>
+                <Form  className="w-100" onSubmit={handleFormSubmit}>
                   <FormGroup>
                     <Label for="Search" size="lg">
                     Search for a Food
@@ -116,23 +157,25 @@ const SearchPage = () => {
                     />
                   </FormGroup>
                   <Button color="danger" type="submit">
-                    SUBMIT
+                    Search
                   </Button>
                 </Form>
                 </CardBody>
               </Card>
               </Col>
-          
-          
-        {searchedFood.length ? (
-        <Row>
-          {searchedFood.map( (food,index)  => ( 
+              </Row>
+      </Container>
+      <Container fluid>
+        {searchedFood ? (
+        <Row className="flex-row">
+          {searchedFood.foods.map( (food,index)  => ( 
         // <div key={food.fdcId} className='d-flex-inline'>
         // <Col sm="4" key={food.fdcId}>
         <FoodItem
           key={index}
           _id={food.fdcId}
           className={`mt-2`}
+          
           fdcId={food.fdcId}
           foodName={food.foodName}
           displayName={getDisplayName(food)}
@@ -141,12 +184,12 @@ const SearchPage = () => {
         
         // </Col>
         ))}
-        </Row>
-        
-        ) : (
-        <p>You haven't added any products yet!</p>
+        </Row> ) : (
+      <p>You haven't added any products yet!</p>
     )}
-        </Container>
+    </Container>
+        
+
 
 </div>
     )}

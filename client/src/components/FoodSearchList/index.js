@@ -37,7 +37,7 @@ const FoodResultDisplay = ( {foodSelection, setFoodSelection} ) => {
         // <Col sm="4" key={food.fdcId}>
         <FoodCard
         key={food.fdcId}
-        className={`mt-2 body`}
+        className={`mt-2`}
         foodName={getDisplayName(food)}
         nutrientList={nutritionData[food.fdcId]}
         fdcId={food.fdcId}

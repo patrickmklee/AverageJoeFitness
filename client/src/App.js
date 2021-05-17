@@ -12,6 +12,8 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Timeline from './pages/Timeline';
 import Nav from './components/Nav';
+import dayjs from 'dayjs';
+
 
 import {ScheduleProvider} from './utils/GlobalState'
 

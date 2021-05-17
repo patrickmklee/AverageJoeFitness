@@ -8,7 +8,7 @@ import { idbPromise } from '../../utils/helpers';
 import { QUERY_CHECKOUT } from '../../utils/queries';
 // import { loadStripe } from '@stripe/stripe-js';
 import { useLazyQuery } from '@apollo/react-hooks';
-
+import ModalConfirmMeal  from '../ModalConfirmMeal'
 
 // const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
 
@@ -16,7 +16,10 @@ const Meal = () => {
 
     const [state, dispatch] = useScheduleContext();
     const [getCheckout, {data}] = useLazyQuery(QUERY_CHECKOUT);
-
+    // const [modal, setModal] = useState(false);
+  
+    // const toggle = () => setModal(!modal);
+  
     useEffect(() => {
         async function getMeal() {
             const meal = await idbPromise('meal', 'get');
@@ -48,27 +51,29 @@ const Meal = () => {
 
 
     function submitCheckout() {
-        const productIds = [];
+        const foodIds = [];
 
         state.meal.forEach((item) => {
             for (let i=0; i<item.purchaseQuantity; i++) {
-                productIds.push(item._id);
+              foodIds.push(item._id);
             }
         })
 
         getCheckout({
-            variables: {products: productIds}
+            variables: {foods: foodIds}
         })
     }
 
 
-    // useEffect(() => {
-    //     if(data) {
-    //         stripePromise.then((res) => {
-    //             res.redirectToCheckout({ sessionId: data.checkout.session})
-    //         })
-    //     }
-    // }, [data])
+    useEffect(() => {
+        if(data) {
+          
+            // stripePromise.then((res) => {
+
+            //     res.redirectToCheckout({ sessionId: data.checkout.session})
+            // })
+        }
+    }, [data])
     
 
     if(!state.mealOpen) {
@@ -106,7 +111,10 @@ const Meal = () => {
     //     </div>
     // </div>
     <div className="meal">
-  <div className="close" onClick={toggleMeal}>[close]</div>
+    <div className="close" onClick={toggleMeal}>[close]</div>  
+    
+    
+  
   <h2>Shopping Meal</h2>
   {state.meal.length ? (
     <div>

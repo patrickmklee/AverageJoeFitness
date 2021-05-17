@@ -1,17 +1,19 @@
 
 import React, { useState } from 'react';
+import { useScheduleContext } from '../../utils/GlobalState';
+
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 
-const ModalConfirmSelection = (props) => {
+const ModalConfirmMeal = (props) => {
     const {
       buttonLabel,
       className,
       food
     } = props;
-  
+    
     const [modal, setModal] = useState(false);
-  
+    const [state,dispatch] = useScheduleContext;
     const toggle = () => setModal(!modal);
   
     return (
@@ -31,4 +33,4 @@ const ModalConfirmSelection = (props) => {
     );
   }
   
-  export default ModalConfirmSelection;
+  export default ModalConfirmMeal;
