@@ -49,7 +49,8 @@ const typeDefs = gql`
     email: String
     height: Int
     weight: Int
-    Age: Int
+    age: Int
+    gender: String
     optimalCalories: Int
     timeline: Timeline
   }
@@ -61,15 +62,15 @@ const typeDefs = gql`
 
   type Query {
     me: User
-    users: [User]
-    user(username: String!): User
-    timelines(username: String): [Timeline]
     timeline: Timeline
   }
 
   type Mutation {
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
+    updateUser(height: Int, weight: Int, age: Int, gender: String): User
+    updatePassword(password: String!): Auth
+    deleteUser: Auth
     addMeal(date: String!, time: String!, meal: [MealInput]): Timeline
     deleteMeal(date: String!, time: String!): Timeline
     addExercise(date: String!, time: String!, exercise: ExerciseInput): Timeline

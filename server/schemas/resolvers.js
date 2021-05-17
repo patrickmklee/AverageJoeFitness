@@ -16,30 +16,13 @@ const resolvers = {
       throw new AuthenticationError('Not logged in');
     },
 
-    timelines: async (parent, { username }) => {
-      const params = username ? { username } : {};
-      return Timeline.find(params).sort({ createdAt: -1 });
-    },
-
     timeline: async (parent, args, context) => {
       if (context.user) {
         return await Timeline.findOne({ username: context.user.username })
       }
 
       throw new AuthenticationError("Not logged in");
-    },
-
-    users: async () => {
-      return User.find()
-        .select('-__v -password')
-        .populate('timeline');
-    },
-
-    user: async (parent, { username }) => {
-      return User.findOne({ username })
-        .select('-__v -password')
-        .populate('timeline');
-    },
+    }
   },
 
   Mutation: {
@@ -47,7 +30,7 @@ const resolvers = {
       const user = await User.create(args);
       const token = signToken(user);
 
-      const timeline = await Timeline.create({ ...args, username: user.username });
+      const timeline = await Timeline.create({ username: user.username });
   
       await User.findByIdAndUpdate(
         { _id: user._id },
@@ -56,6 +39,54 @@ const resolvers = {
       );
   
       return { token, user };
+    },
+
+    updatePassword: async (parent, { password }, context) => {
+      const user = await User.findOne({ _id: context.user._id });
+    
+      if (!user) {
+        throw new AuthenticationError('Incorrect credentials');
+      }
+
+      await User.findByIdAndUpdate(
+        { _id: context.user._id },
+        { password: password },
+        { new: true }
+      );
+    
+      const token = signToken(user);
+      return { token, user };
+    },
+
+    updateUser: async (parent, args, context) => {
+      if (context.user) {
+        userData = await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          args,
+          { new: true }
+        );
+      
+        return userData;
+      }
+
+      throw new AuthenticationError("Not logged in");
+      
+    },
+
+    deleteUser: async (parent, args, context) => {
+      if (context.user) {
+        await User.deleteMany(
+          { _id: context.user._id }
+        );
+
+        await Timeline.deleteMany(
+          { username: context.user.username }
+        );
+    
+        return "Account Deleted";
+      }
+
+      throw new AuthenticationError("Not logged in");
     },
 
     login: async (parent, { email, password }) => {
@@ -161,7 +192,7 @@ const resolvers = {
 
         // console.log(userDate);
         if(userDate === null) {
-          console.log("DATE DOES NOT EXIST")
+          // console.log("DATE DOES NOT EXIST")
           exerciseData = await Timeline.findOneAndUpdate(
             { username: context.user.username },
             { $addToSet: { date: { day: args.date, schedule: [{time: args.time, exercise: args.exercise}]} }},

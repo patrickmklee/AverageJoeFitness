@@ -23,7 +23,7 @@ db.once('open', async () => {
         day: "02-13-2021",
         schedule: [
           {
-            time: "8:00pm",
+            time: "8:00",
             meal: [
               {
                 itemName: "burger",
@@ -40,7 +40,7 @@ db.once('open', async () => {
       {
         day: "02-15-2021",
         schedule: {
-          time: "6:00am",
+          time: "6:00",
           meal: [
             {
               itemName: "burger",
