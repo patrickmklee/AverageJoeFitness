@@ -1,25 +1,14 @@
-import React, from "react";
-import ProductList from "../components/ProductList";
-import CategoryMenu from "../components/CategoryMenu";
-import Cart from '../components/Cart';
-
-// const Home = () => {
-//   const [currentCategory, setCategory] = useState("");
-
-//   return (
-//     <div className="container">
-//       <CategoryMenu setCategory={setCategory} />
-//       <ProductList currentCategory={currentCategory} />
-//     </div>
-//   );
-// };
+import React from "react";
+// import SearchPage from "./SearchPage";
+// import CategoryMenu from "../components/CategoryMenu";
+import Meal from '../components/Meal';
 
 const Home = () => {
   return (
     <div className="container">
-      <CategoryMenu />
-      <ProductList />
-      <Cart />
+      {/* <CategoryMenu /> */}
+      {/* <SearchPage /> */}
+      <Meal />
     </div>
   );
 };

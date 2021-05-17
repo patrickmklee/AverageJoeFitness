@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import { useMealContext } from "../utils/GlobalState";
+import { useScheduleContext } from "../utils/GlobalState";
 
 
 import { useMutation } from '@apollo/react-hooks';
@@ -10,7 +10,6 @@ import {FdcSearchFood} from '../utils/API.js';
 // import FoodResultDisplay from '../components/FoodResultDisplay.js'
 import FoodItem from '../components/FoodItem';
 import {filterNutrients} from '../utils/helpers';
-import TimelinePage from './Home.js';
 // import ModalConfirmSelection from '../components/ModalConfirmSelection';
 import {
   Container,
@@ -30,7 +29,7 @@ import { idbPromise } from '../utils/helpers';
 const getDisplayName = (food) => { return `${food.dataType === 'Branded' && food.brandName ? food.brandName : ''} ${food.description}`}
 
 const SearchPage = () => {
-  const [state, dispatch] = useMealContext();
+  const [state, dispatch] = useScheduleContext();
   // const { searchCriteria } = state;
 
   const [searchedFood, setSearchResult] = useState('');

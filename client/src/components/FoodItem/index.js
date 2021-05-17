@@ -1,12 +1,12 @@
 import React from 'react';
-import { useMealContext } from "../../utils/GlobalState";
+import { useScheduleContext } from "../../utils/GlobalState";
 import {ADD_TO_MEAL} from "../../utils/actions"
 import {Col, Card, Button, CardBody, CardHeader } from 'reactstrap';
 import {idbPromise} from "../../utils/helpers"
 import {filterNutrients} from '../../utils/helpers'
 
 const FoodItem = ( item ) => {
-    const [state, dispatch] = useMealContext();
+    const [state, dispatch] = useScheduleContext();
     const {
         fdcId,
         foodName,

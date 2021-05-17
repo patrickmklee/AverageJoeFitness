@@ -6,12 +6,14 @@ import ApolloClient from 'apollo-boost';
 
 import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
-import NoMatch from "./pages/NoMatch";
 
-import Login from './pages/Login';
+import NoMatch from "./pages/NoMatch";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Timeline from './pages/Timeline';
 import Nav from './components/Nav';
 
-import {MealProvider} from './utils/GlobalState'
+import {ScheduleProvider} from './utils/GlobalState'
 
 
 
@@ -32,15 +34,19 @@ function App() {
     <ApolloProvider client={client}>
       <Router>
         <div>
-        <MealProvider>
+        <ScheduleProvider>
 
         <Nav />
             <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={Signup} />
+            <Route exact path="/timeline" component={Timeline} />
             <Route exact path="/addMeal" component={SearchPage} />
+            <Route component={NoMatch} />
+
             </Switch>
-        </MealProvider>
+        </ScheduleProvider>
         </div>
       </Router>
       </ApolloProvider>

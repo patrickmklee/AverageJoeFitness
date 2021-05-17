@@ -1,11 +1,11 @@
 import React, { createContext, useContext } from "react";
-import { useMealReducer } from './reducers'
+import { useScheduleReducer } from './reducers'
 
-const MealContext = createContext();
-const { Provider } = MealContext;
+const ScheduleContext = createContext();
+const { Provider } = ScheduleContext;
 
-const MealProvider = ({ value = [], ...props }) => {
-  const [state, dispatch] = useMealReducer({
+const ScheduleProvider = ({ value = [], ...props }) => {
+  const [state, dispatch] = useScheduleReducer({
     // products: [],
     foods: [],
     meal: [],
@@ -16,8 +16,8 @@ const MealProvider = ({ value = [], ...props }) => {
   return <Provider value={[state, dispatch]} {...props} />;
 };
 
-const useMealContext = () => {
-  return useContext(MealContext);
+const useScheduleContext = () => {
+  return useContext(ScheduleContext);
 };
 
-export { MealProvider, useMealContext };
+export { ScheduleProvider, useScheduleContext };
