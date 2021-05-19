@@ -29,11 +29,11 @@ const MealItem = ({ item }) => {
         } else {
           dispatch({
             type: UPDATE_MEAL_QUANTITY,
-            _id: item._id,
-            purchaseQuantity: parseInt(value)
+            fdcId: item.fdcId,
+            quantity: parseInt(value)
           });
 
-          idbPromise('meal', 'put', { ...item, purchaseQuantity: parseInt(value)})
+          idbPromise('meal', 'put', { ...item, quantity: parseInt(value)})
         }
       };
 
@@ -41,19 +41,16 @@ const MealItem = ({ item }) => {
   return (
     <div className="flex-row">
       <div>
-        <img
-          src={`/images/${item.image}`}
-          alt=""
-        />
+        {/* {item. */}
       </div>
       <div>
-        <div>{item.name}, ${item.price}</div>
+        <div>{item.displayName}, {item.calories}</div>
         <div>
           <span>Qty:</span>
           <input
             type="number"
             placeholder="1"
-            value={item.purchaseQuantity}
+            value={item.quantity}
             onChange={onChange}
           />
             <span

@@ -6,11 +6,10 @@ const { Provider } = ScheduleContext;
 
 const ScheduleProvider = ({ value = [], ...props }) => {
   const [state, dispatch] = useScheduleReducer({
-    // products: [],
     foods: [],
     meal: [],
     mealOpen: false,
-    searchCriteria: '',
+    searchCriteria: {},
     timeline: [],
   });
 

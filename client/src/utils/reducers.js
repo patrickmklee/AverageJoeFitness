@@ -19,8 +19,40 @@ export const reducer = (state, action) => {
       return {
         ...state,
         mealOpen: true,
-        meal: [...state.meal,  action.food ]
+        foods: [...state.foods,  action.food ]
       };
+  case UPDATE_MEAL_QUANTITY:
+    return {
+      ...state,
+      mealOpen: true,
+      meal: state.meal.map(food => {
+        if (food.fdcId === food.fdcId) {
+            food.quantity = action.quantity
+        }
+        return food
+      })
+    };
+    case ADD_MULTIPLE_TO_MEAL:
+        return {
+          ...state,
+          meal: [...state.meal, ...action.meal],
+        };
+    case REMOVE_FROM_MEAL:
+      let newState = state.meal.filter(food => {
+        return food._id !== action._id;
+      });
+
+      return {
+        ...state,
+        mealOpen: newState.length > 0,
+        meal: newState
+      };
+    case TOGGLE_MEAL:
+        return {
+          ...state,
+          mealOpen: !state.mealOpen
+        };
+
     case CLEAR_MEAL:
         return {
           ...state,
@@ -30,7 +62,7 @@ export const reducer = (state, action) => {
     case UPDATE_SEARCH_CRITERIA:
     return {
         ...state,
-        searchCriteria: action.searchCriteria
+        searchCriteria: action.searchCriteria,
     }
     case UPDATE_TIMELINE:
         return {
@@ -40,8 +72,7 @@ export const reducer = (state, action) => {
     case UPDATE_FOODS_RESULTS:
         return {
             ...state,
-            searchCriteria: action.searchCriteria,
-            foods: [...state.foods, ...action.foods]
+            foods: action.foods
         }
     default:
       return state;

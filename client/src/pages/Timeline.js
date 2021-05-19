@@ -11,14 +11,17 @@ import { idbPromise } from '../utils/helpers';
 
 import {
   Row,
+  Col,
   Container
 } from 'reactstrap';
+
+const getSchedule = (timeline) => timeline.reduce((acc,curr)  => (acc[curr]='',acc),{});
 
 const Timeline = () => {
     const [state, dispatch] = useScheduleContext();
 
     // const { user } = state;
-    const { loading,error, data  } = useQuery(QUERY_TIMELINE);
+    const { loading, error, data  } = useQuery(QUERY_TIMELINE);
     const { data: userData } = useQuery(QUERY_ME_BASIC);
     // const timeline = data?.timeline || [];
     const loggedIn = Auth.loggedIn();
@@ -27,15 +30,15 @@ const Timeline = () => {
     // const { loading, data } = useQuery(QUERY_ME);
     // const { loading, data } = useQuery(QUERY_TIMELINE);
     // const { data: userData } = useQuery(QUERY_ME_BASIC);
-    // const timeline = data?.timeline || [];
+    const timeline = data?.timeline || [];
   
     // const loggedIn = Auth.loggedIn();
     useEffect(() => {
       if(data) {
           console.log(data);
         dispatch({
-             type: UPDATE_TIMELINE,
-            timeline: data.timeline
+            type: UPDATE_TIMELINE,
+            timeline: {data}
           });
         //   data.timeline.
         //   forEach(({schedule}) => {
@@ -93,29 +96,46 @@ const Timeline = () => {
   // const initData = ({"_id": "609fc3d3a10e30335cb5ed24")}
   
   
-  if (loading) return 'Loading...';
-  if (error) return `Error! ${error.message}`;
-  // };
-  // console.log(data);
-  // const schedule = data.schedule;
-  // const { schedule } = data;
-        // time={data.schedule.time}
-        // meal={data.schedule.meal}
-        // exercise={data.schedule.exercise}
-  // console.log(data.timeline);//schedule.exercise);
+//   if (loading) return 'Loading...';
+//   if (error) return `Error! ${error.message}`;
+
+
+  function ListItem(props) {
+    // Correct! There is no need to specify the key here:
+    return <li>{props.value}</li>;
+  }
+  
+function DayList(props) {
+    const days = props.date;
+    console.log('in DayList');
+    console.log(days);
+    return (
+        <Row>
+       {days.map( day => (
+       <Col xs="12" md="3" key={day._id}>
+          {/* {day.map(schedule)=> ( */}
+           <ScheduleItem
+           schedule={day.schedule}
+           />
+        {/* ) */}
+        </Col>
+
+        
+    ))}
+    </Row>
+
+    )
+          };
+
   console.log("Finished Loading");
   console.log(data);
+  console.log(loggedIn);
     return(
       <Container fluid>
-        {/* {loggedIn && userData ? ( <Row> */}
-        {data.timeline.schedule.map( (item,index) => (
-        <ScheduleItem
-        key={index}
-        schedule={item}
-        />
-        )
-        )};
-{/* </Row>) : null} */}
+        { (~state.searchCriteria||null)&&data&&loggedIn ? (
+
+          DayList(data.timeline)
+        ) : null}
       </Container>
     )
     }

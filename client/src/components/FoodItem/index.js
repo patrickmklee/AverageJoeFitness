@@ -1,63 +1,103 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import dayjs from 'dayjs';
 import Auth from '../../utils/auth';
-
+import {Link} from 'react-router-dom'
 import { useScheduleContext } from "../../utils/GlobalState";
 import {ADD_TO_MEAL} from "../../utils/actions"
-import {Col, Card, Button, CardBody, CardHeader, CardDeck, CardText, CardTitle } from 'reactstrap';
+import {Col, Card, Button, CardBody, CardHeader, CardTitle } from 'reactstrap';
 import {idbPromise} from "../../utils/helpers"
 import { useMutation } from '@apollo/react-hooks';
 import { ADD_MEAL } from '../../utils/mutations';
 
 import {filterNutrients, convertNutrientName} from '../../utils/helpers'
+import ModalConfirmMeal from '../ModalConfirmMeal';
 
 
 const FoodItem = ( item ) => {
     const [state, dispatch] = useScheduleContext();
-    const {
-        _id,
-        fdcId,
-        foodCategories,
-        foodName,
-        foodNutrients,
-        displayName
-    } = item;
-    // const {currentSearchCriteria} = state;
-    // const nutritionData = nutrientList.map(food => `${food.fdcId} : ${filterNutrients(food)}`);
-    // const addToMeal = () => {
-    //       dispatch({
-    //         type: ADD_TO_MEAL,
-    //         food: {...item}
-    //         // product: { ...item, purchaseQuantity: 1 }
-    //       });
-    //       idbPromise('meal', 'put',  {...item });
-    //     // const mealItem = 
-    //     }
-    // const {searchCriteria} = state;
-    // useEffect(() => {
-    //     if (searchCriteria) {
+    // const {...food} = item;
 
-    //     }
-    // })
+    // const [addMeal]= useMutation(ADD_MEAL);
+    const {
+        displayName,
+        setModal,
+        ...food
+    } = item;
+    
+    
+
+    // useEffect( () => {
+    //   async function saveMeal() {
+    //       const meal = await idbPromise('meal', 'get');
+    //       const items = meal.map(item => item._id);
+    //       if (items.length) {
+    //           const { data } = await addMeal({variables: { items } });
+    //               //   date: datedItem.date,
+    //               //     time: datedItem.time,
+    //               //     foodName: datedItem.description
+    //               // calories: datedItem[1008] 
+    //               // }
+    //           const productData = data.addMeal.items;
+          
+    //           productData.forEach((item) => {
+    //             idbPromise('meal', 'delete', item);
+    //           });
+    //         }
+  
+    //         setTimeout(() => {
+    //           window.location.assign('/');
+    //         }, 3000);
+          
+    //       }
+    //       saveMeal();
+    //   }, [addMeal]);
+
+    const addToMeal = item => {
+        // addToMeal(item)
+        // const keyNutrients = filterNutrients(item.reduce((acc,{nutrientId,...data})  => (acc[nutrientId]=data,acc),{});
+        const datedItem = {...item};
+        
+        datedItem.date = dayjs().format('DD-MM-YYYY');
+        
+        datedItem.time = dayjs().format('HH:mm') ;//MM-YYYY'); 
+        console.log(datedItem)
+        // addFood({
+        //     variables: { date: datedItem.date,
+        //         time: datedItem.time,
+        //         foodName: datedItem.description
+        //         // calories: datedItem[1008] 
+        //     }
+        // })}
+        // dispatch({
+        //     type: ADD_TO_MEAL,
+        //     meal: {...datedItem, quantity: 1}
+        // // product: { ...item, purchaseQuantity: 1 }
+        //   });
+        //   idbPromise('meal', 'put',  {...datedItem, quantity:1 })
+        }
+        // // const mealItem = 
+        // }
+    // const {searchCriteria} = state;
+
     // }
     // console.log(foodNutrients);
-    const keyNutrients = filterNutrients(foodNutrients).reduce((acc,{nutrientId,...data})  => (acc[nutrientId]=data,acc),{});
+    //
     // console.log(foodNutrients);
-    // console.log(keyNutrients);
+    //console.log(keyNutrients);
 
-    const handleClick = item => {
+    // const handleClick = food => {
         
-        // alert(item._id);
-        const datedItem = {...item};
-        datedItem.date = dayjs().format();
-        console.log(datedItem)
-        dispatch({
-            type: ADD_TO_MEAL,
-            meal: {...datedItem}
-            // product: { ...item, purchaseQuantity: 1 }
-          });
-          idbPromise('meal', 'put',  {...datedItem });
-    }
+    //     // alert(item._id);
+    //     const datedItem = {...food};
+    //     datedItem.date = dayjs().format();
+    //     console.log(datedItem)
+    //     dispatch({
+    //         type: ADD_TO_MEAL,
+    //         meal: {...datedItem, quantity : 1}
+    //         // product: { ...item, purchaseQuantity: 1 }
+    //       });
+    //       idbPromise('meal', 'put',  {...datedItem, quantity : 1 });
+    // }
     function ListItem(props) {
         // Correct! There is no need to specify the key here:
         return <li>{props.value}</li>;
@@ -80,11 +120,15 @@ const FoodItem = ( item ) => {
     };
     return (
     <Col xs='12' md='3'>
+        
         <Card className="w-100" color='light' >
-            <CardHeader>{foodCategories}</CardHeader>
+            
+            <CardHeader>{food.foodCategories}</CardHeader>
+            {/* <Link to={`/foods/${food._id}`}> */}
                 <CardBody>
+
                 <CardTitle tag='h5'>{displayName}</CardTitle>
-                {NutrientList(item)}
+                {NutrientList(food)}
                 {/* <ul>
                     
                 {filterNutrients(foodNutrients).map(nutrient => (
@@ -93,11 +137,18 @@ const FoodItem = ( item ) => {
                     </li>
                 ))}
                 </ul> */}
-
-                </CardBody>
+            <ModalConfirmMeal
+                buttonLabel="Add to Meal"
+                className="food-modal" 
+                displayName={displayName} />
                 
-            <Button onClick={() => {handleClick(item)}}>Add to Meal</Button>
+                </CardBody>
+                {/* </Link>  */}
+                
+          {/* /> */}
         </Card>
+        
+        
         </Col>
     )
 };

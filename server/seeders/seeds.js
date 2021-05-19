@@ -16,7 +16,7 @@ db.once('open', async () => {
     activityLvl: 3
   });
 
-  timeline = await Timeline.create({
+  const timeline = await Timeline.create({
     username: user.username,
     date: [
       {
@@ -36,6 +36,50 @@ db.once('open', async () => {
             }
           }
         ]
+      },
+      {
+        day: "02-14-2021",
+              schedule: [
+                {
+                  time: "4:00pm",
+                  meal: [
+                    {
+
+                      itemName: "burger",
+                      calories: 500
+
+                  },
+                  {
+                    itemName: "salad",
+                      calories: 250
+                   },
+                   {itemName: "chicken",
+                   calories: 432
+                  }
+                ],
+                  exercise: {
+                      category: "run",
+                      duration: 50
+                  }
+                },
+                {
+                  time: "8:00pm",
+                  meal: [{
+
+                      itemName: "fries",
+                      calories: 400
+
+                  },
+                  {itemName: "ice cream",
+                      calories: 800
+                   }
+                   
+                  ],
+                  exercise: {
+                    category: "run",
+                    duration: 50
+                }
+              }]
       },
       {
         day: "02-15-2021",

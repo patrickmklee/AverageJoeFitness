@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useScheduleContext } from '../../utils/GlobalState';
+
 
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
@@ -9,23 +9,25 @@ const ModalConfirmMeal = (props) => {
     const {
       buttonLabel,
       className,
-      food
+      displayName,
+      foodNutrients
     } = props;
     
     const [modal, setModal] = useState(false);
-    const [state,dispatch] = useScheduleContext;
+    
     const toggle = () => setModal(!modal);
   
     return (
       <div>
-        <Button color="danger" onClick={toggle}>{buttonLabel}</Button>
+        <Button color="secondary" onClick={toggle}>{buttonLabel}</Button>
         <Modal isOpen={modal} toggle={toggle} className={className}>
-          <ModalHeader toggle={toggle}>{food}</ModalHeader>
+          <ModalHeader toggle={toggle}></ModalHeader>
           <ModalBody>
-            
+            <h5>{displayName}</h5>
+            <p>{foodNutrients}</p>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={toggle}>Do Something</Button>{' '}
+            <Button color="primary" onClick={toggle}>Add to Meal</Button>{' '}
             <Button color="secondary" onClick={toggle}>Cancel</Button>
           </ModalFooter>
         </Modal>

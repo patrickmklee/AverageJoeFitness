@@ -6,7 +6,7 @@ import ApolloClient from 'apollo-boost';
 
 import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
-
+import Detail from './pages/Detail';
 import NoMatch from "./pages/NoMatch";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -44,7 +44,9 @@ function App() {
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/timeline" component={Timeline} />
-            <Route exact path="/addMeal" component={SearchPage} />
+            {/* <Route exact path="/addMeal" component={SearchPage} /> */}
+            <Route exact path="/foods/:id" component={Detail} />
+
             <Route component={NoMatch} />
 
             </Switch>

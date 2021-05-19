@@ -19,16 +19,16 @@ export const convertNutrientName = nutrient => {
 // const generateFilters = () => { return new Set([1008,1003,1004,1005,1093]) }s
 export const generateFilters = filters =>  { return new Set(filters)} ;
 // ,1003,1004,1005,1093]) }
-export const filterNutrients = (foodNutrients) => foodNutrients.filter(({ nutrientId }) => generateFilters([1008,1003,1004,1005,1093]).has(nutrientId));
+export const filterNutrients =  (foodNutrients) => foodNutrients.filter(({ nutrientId })  => generateFilters([1008,1003,1004,1005,1093]).has(nutrientId)) 
 
 
 export function idbPromise(storeName, method, object) {
     return new Promise((resolve, reject) => {
-      const request = window.indexedDB.open('average-joe-planner', 3);
+      const request = window.indexedDB.open('average-joe-planner', 4);
       let db, tx, store;
       request.onupgradeneeded = function(e) {
         const db = request.result;
-        db.createObjectStore('meal', { keyPath: '_id' });
+        db.createObjectStore('meal', { keyPath: 'fdcId' });
         db.createObjectStore('foods', { keyPath: 'fdcId' });
         db.createObjectStore('timeline', { keyPath: '_id' });
 
