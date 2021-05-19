@@ -12,23 +12,31 @@ const typeDefs = gql`
     _id: ID
     day: String
     schedule: [Schedule]
+    totalConsumedCalories: Int
+    totalBurnedCalories: Int
   }
 
   type Schedule {
     _id: ID
     time: String
     meal: [Meal]
+    mealTotalCalories: Int
     exercise: Exercise
+    exerciseTotalCalories: Int
   }
 
   input MealInput {
+    fdcId: Int
     itemName: String
+    quantity: Int
     calories: Int
   }
 
   type Meal {
     _id: ID
+    fdcId: Int
     itemName: String
+    quantity: Int
     calories: Int
   }
 

@@ -28,7 +28,11 @@ db.once('open', async () => {
               {
                 itemName: "burger",
                 calories: 500
-              }
+              },
+              {
+                itemName: "fries",
+                calories: 400
+              },
             ],
             exercise: {
               category: "run",
