@@ -58,6 +58,16 @@ userSchema.pre('save', async function(next) {
   next();
 });
 
+userSchema.pre('findOneAndUpdate', async function(next) {
+  // const docToUpdate = await this.model.findOne(this.getQuery());
+  if (this.getUpdate().password) {
+    const saltRounds = 10;
+    this.getUpdate().password = await bcrypt.hash(this.getUpdate().password, saltRounds);
+  }
+  
+  next();
+});
+
 // compare the incoming password with the hashed password
 userSchema.methods.isCorrectPassword = async function(password) {
   return bcrypt.compare(password, this.password);
