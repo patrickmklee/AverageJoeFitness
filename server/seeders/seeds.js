@@ -26,11 +26,15 @@ db.once('open', async () => {
             time: "8:00",
             meal: [
               {
+                fdcId: 15,
                 itemName: "burger",
+                quantity: 1,
                 calories: 500
               },
               {
+                fdcId: 89,
                 itemName: "fries",
+                quantity: 1,
                 calories: 400
               },
             ],
@@ -43,19 +47,38 @@ db.once('open', async () => {
       },
       {
         day: "02-15-2021",
-        schedule: {
-          time: "6:00",
-          meal: [
-            {
-              itemName: "burger",
-              calories: 500
+        schedule: [
+          {
+            time: "6:00",
+            meal: [
+              {
+                fdcId: 15,
+                itemName: "burger",
+                quantity: 1,
+                calories: 500
+              }
+            ],
+            exercise: {
+              category: "run",
+              duration: 25
             }
-          ],
-          exercise: {
-            category: "run",
-            duration: 50
+          },
+          {
+            time: "9:00",
+            meal: [
+              {
+                fdcId: 7,
+                itemName: "sandwich",
+                quantity: 1,
+                calories: 300
+              }
+            ],
+            exercise: {
+              category: "run",
+              duration: 30
+            }
           }
-        }
+        ]
       }
     ]
   });
