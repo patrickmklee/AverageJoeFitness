@@ -50,50 +50,6 @@ const SearchPage = () => {
   const { loading, data } = useQuery(QUERY_TIMELINE);
   const [modal, setModal] = useState(false);
 
-  // useEffect(() => {
-  //   if(data) {
-  //     dispatch({
-  //          type: UPDATE_PRODUCTS,
-  //         products: data.products
-  //       });
-  //       data.products.forEach((product) => {
-  //         idbPromise('products', 'put', product);
-  //       });
-  //   } else if (!loading) {
-  //     idbPromise('products', 'get').then((products) => {
-  //       dispatch({
-  //         type: UPDATE_PRODUCTS,
-  //        products: products
-  //      });
-  //     });
-  //   }
-  // }, [data, loading, dispatch]);
-  // // useEffect(() => {
-  // //   document.title = `${foodSelection} fdcid`;
-  // // }, [foodSelection]);
-  // // const {searchCriteria} = state;
-  // useEffect(() => {
-  //   if(data) {
-  //     dispatch({
-  //          type: UPDATE_FOODS_RESULTS,
-  //         products: data.products
-  //       });
-  //       data.products.forEach((product) => {
-  //         idbPromise('products', 'put', product);
-  //       });
-  //   } else if (!loading) {
-  //     idbPromise('products', 'get').then((products) => {
-  //       dispatch({
-  //         type: UPDATE_PRODUCTS,
-  //        products: products
-  //      });
-  //     });
-  //   }
-  // }, [data, loading, dispatch]);
-    const confirmFood = event => {
-      event.preventDefault();
-      setModal(true);
-    }
     // const foods = searchedFood?.foods||[];
     useEffect( () => {
       async function fetchFoodData() {
@@ -115,7 +71,7 @@ const SearchPage = () => {
           });
 
          } catch (err) {
-        console.error(err);
+            console.error(err);
    
       
           }
@@ -133,26 +89,10 @@ const SearchPage = () => {
     }
     
     fetchFoodData();
-      //   });
+      
       
     }, [currentSearch, loading, dispatch]);
-      
-  //   const handleSearch = async query => {
-  //     try {
-  //       const response = await FdcSearchFood(process.env.REACT_APP_USDA_API_KEY, query);
 
-  //     if (!response.ok) {
-  //       throw new Error('something went wrong!');
-  //     }
-
-  //     const data = await response.json();
-  //     console.log(data);
-  //     setSearchResult(data);
-  //     // setSearchInput('');
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
 
   const handleFormSubmit =  (event) => {
     event.preventDefault();
