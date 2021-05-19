@@ -58,3 +58,21 @@ export const ADD_USER = gql`
     }
   }
 `;
+
+export const ADD_EXERCISE = gql`
+  mutation AddExercise($date: String!, $time: String!, $category: String!, $duration: Int!) {
+    addExercise(date: $date, time: $time, exercise: {category: $category, duration: $duration}) {
+      username
+      date {
+        schedule {
+          time
+          exercise {
+            category
+            duration
+          }
+        }
+      }
+    }
+  }
+
+`;
