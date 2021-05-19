@@ -74,7 +74,9 @@ const ModalConfirmMeal = () => {
     setDate(newDate);
 
     toggleCal();
-    toggle();
+    if (!exerciseModal){
+      toggle();
+    }
   }
 
   return (

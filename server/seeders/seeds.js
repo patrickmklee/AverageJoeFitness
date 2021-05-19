@@ -1,5 +1,8 @@
 const db = require('../config/connection');
-const { Timeline, User } = require('../models');
+const {
+  Timeline,
+  User
+} = require('../models');
 
 db.once('open', async () => {
   await Timeline.deleteMany({});
@@ -18,25 +21,72 @@ db.once('open', async () => {
 
   const timeline = await Timeline.create({
     username: user.username,
-    date: [
-      {
+    date: [{
         day: "02-13-2021",
-        schedule: [
-          {
-            time: "8:00",
-            meal: [
-              {
-                fdcId: 15,
+        schedule: [{
+          time: "8:00",
+          meal: [{
+              fdcId: 15,
+              itemName: "burger",
+              quantity: 1,
+              calories: 500
+            },
+            {
+              fdcId: 89,
+              itemName: "fries",
+              quantity: 1,
+              calories: 400
+            },
+          ],
+          exercise: {
+            category: "run",
+            duration: 50
+          }
+        }]
+      },
+      {
+        day: "02-14-2021",
+        schedule: [{
+            time: "4:00pm",
+            meal: [{
+                fdcId: 3,
                 itemName: "burger",
                 quantity: 1,
                 calories: 500
               },
               {
-                fdcId: 89,
-                itemName: "fries",
+                fdcId: 19,
+                itemName: "salad",
                 quantity: 1,
+                calories: 250
+              },
+              {
+                fdcId: 21,
+                itemName: "chicken",
+                quantity: 1,
+                calories: 432
+              }
+            ],
+            exercise: {
+              category: "run",
+              duration: 50
+            }
+          },
+          {
+            time: "8:00pm",
+            meal: [{
+                fdcId: 7,
+                itemName: "fries",
+                quantity: 2,
                 calories: 400
               },
+              {
+                fdcId: 9,
+                itemName: "ice cream",
+                quantity: 2,
+                calories: 800
+              }
+
             ],
             exercise: {
               category: "run",
@@ -46,62 +96,15 @@ db.once('open', async () => {
         ]
       },
       {
-        day: "02-14-2021",
-              schedule: [
-                {
-                  time: "4:00pm",
-                  meal: [
-                    {
-
-                      itemName: "burger",
-                      calories: 500
-
-                  },
-                  {
-                    itemName: "salad",
-                      calories: 250
-                   },
-                   {itemName: "chicken",
-                   calories: 432
-                  }
-                ],
-                  exercise: {
-                      category: "run",
-                      duration: 50
-                  }
-                },
-                {
-                  time: "8:00pm",
-                  meal: [{
-
-                      itemName: "fries",
-                      calories: 400
-
-                  },
-                  {itemName: "ice cream",
-                      calories: 800
-                   }
-                   
-                  ],
-                  exercise: {
-                    category: "run",
-                    duration: 50
-                }
-              }]
-      },
-      {
         day: "02-15-2021",
-        schedule: [
-          {
+        schedule: [{
             time: "6:00",
-            meal: [
-              {
-                fdcId: 15,
-                itemName: "burger",
-                quantity: 1,
-                calories: 500
-              }
-            ],
+            meal: [{
+              fdcId: 15,
+              itemName: "burger",
+              quantity: 1,
+              calories: 500
+            }],
             exercise: {
               category: "run",
               duration: 25
@@ -109,14 +112,12 @@ db.once('open', async () => {
           },
           {
             time: "9:00",
-            meal: [
-              {
-                fdcId: 7,
-                itemName: "sandwich",
-                quantity: 1,
-                calories: 300
-              }
-            ],
+            meal: [{
+              fdcId: 7,
+              itemName: "sandwich",
+              quantity: 1,
+              calories: 300
+            }],
             exercise: {
               category: "run",
               duration: 30
@@ -127,11 +128,13 @@ db.once('open', async () => {
     ]
   });
 
-  await User.findByIdAndUpdate(
-    { _id: user._id },
-    { timeline: timeline._id },
-    { new: true }
-  );
+  await User.findByIdAndUpdate({
+    _id: user._id
+  }, {
+    timeline: timeline._id
+  }, {
+    new: true
+  });
 
   console.log('all done!');
   process.exit(0);
