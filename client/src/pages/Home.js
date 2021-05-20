@@ -14,8 +14,7 @@ const Home = () => {
           <AddExercise />
         </div>
         <div className="col-sm-9">
-          {/* <SearchPage /> */}
-          <AddMeal />
+          {/* <AddMeal /> */}
         </div>
       </div>
       <div className="row">

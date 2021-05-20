@@ -9,9 +9,9 @@ import {idbPromise} from "../../utils/helpers"
 import { useMutation } from '@apollo/react-hooks';
 import { ADD_MEAL } from '../../utils/mutations';
 
-import {filterNutrients, convertNutrientName} from '../../utils/helpers'
+import {filterNutrients, filterCalories, convertNutrientName} from '../../utils/helpers'
 import ModalConfirmMeal from '../ModalConfirmMeal';
-
+import { isCompositeType } from 'graphql';
 
 const FoodItem = ( item ) => {
     const [state, dispatch] = useScheduleContext();
@@ -19,24 +19,27 @@ const FoodItem = ( item ) => {
 
     // const [addMeal]= useMutation(ADD_MEAL);
     const {
+        fdcId,
         displayName,
-        setModal,
         ...food
     } = item;
     
-    
-
+    console.log(state.meal);
+    // const displayName = getDisplayName(item);
     // useEffect( () => {
-    //   async function saveMeal() {
+    //   addMeal = async function()  {
     //       const meal = await idbPromise('meal', 'get');
     //       const items = meal.map(item => item._id);
     //       if (items.length) {
     //           const { data } = await addMeal({variables: { items } });
-    //               //   date: datedItem.date,
-    //               //     time: datedItem.time,
-    //               //     foodName: datedItem.description
-    //               // calories: datedItem[1008] 
-    //               // }
+    //       }
+    //     }
+    // })
+                  //   date: datedItem.date,
+                  //     time: datedItem.time,
+                  //     foodName: datedItem.description
+                  // calories: datedItem[1008] 
+                  // }
     //           const productData = data.addMeal.items;
           
     //           productData.forEach((item) => {
@@ -52,29 +55,28 @@ const FoodItem = ( item ) => {
     //       saveMeal();
     //   }, [addMeal]);
 
-    const addToMeal = item => {
+    const addToMeal = (food) => {
         // addToMeal(item)
-        // const keyNutrients = filterNutrients(item.reduce((acc,{nutrientId,...data})  => (acc[nutrientId]=data,acc),{});
-        const datedItem = {...item};
+        console.log(food)
+        const {...datedItem} = food;
+        // const keyNutrients = datedItem.reduce((acc,{nutrientId,...data})  => (acc[nutrientId]=data,acc),{})
+        let calories = filterCalories(food.foodNutrients);
         
+        console.log(calories);
         datedItem.date = dayjs().format('DD-MM-YYYY');
         
         datedItem.time = dayjs().format('HH:mm') ;//MM-YYYY'); 
-        console.log(datedItem)
-        // addFood({
-        //     variables: { date: datedItem.date,
-        //         time: datedItem.time,
-        //         foodName: datedItem.description
-        //         // calories: datedItem[1008] 
-        //     }
-        // })}
-        // dispatch({
-        //     type: ADD_TO_MEAL,
-        //     meal: {...datedItem, quantity: 1}
-        // // product: { ...item, purchaseQuantity: 1 }
-        //   });
-        //   idbPromise('meal', 'put',  {...datedItem, quantity:1 })
-        }
+        console.log(datedItem);
+
+        dispatch({
+            type: ADD_TO_MEAL,
+            meal: {...datedItem, quantity: 1}
+        
+          });
+          idbPromise('meal', 'put',  {...datedItem, quantity:1 })
+    
+    }
+        
         // // const mealItem = 
         // }
     // const {searchCriteria} = state;
@@ -99,15 +101,12 @@ const FoodItem = ( item ) => {
     //       idbPromise('meal', 'put',  {...datedItem, quantity : 1 });
     // }
     function ListItem(props) {
-        // Correct! There is no need to specify the key here:
         return <li>{props.value}</li>;
       }
       
     function NutrientList(props) {
+        console.log(props);
         const nutrients = props.foodNutrients;
-        // const nutrient = convertNutrientName(nutrientRaw);
-        // const keyNutrients = nutrients.reduce( (acc,curr) => (acc[curr]='',acc),{});
-
         return (
             <ul>
             
@@ -119,33 +118,20 @@ const FoodItem = ( item ) => {
         )
     };
     return (
-    <Col xs='12' md='3'>
-        
+    <Col xs='12' md='12'>
         <Card className="w-100" color='light' >
-            
             <CardHeader>{food.foodCategories}</CardHeader>
-            {/* <Link to={`/foods/${food._id}`}> */}
-                <CardBody>
+            <CardBody id={fdcId}>
 
-                <CardTitle tag='h5'>{displayName}</CardTitle>
-                {NutrientList(food)}
-                {/* <ul>
-                    
-                {filterNutrients(foodNutrients).map(nutrient => (
-                    <li key={nutrient.nutrientId} value={nutrient.value}>
-                    {nutrient.nutrientName}: {nutrient.value} {nutrient.unitName}
-                    </li>
-                ))}
-                </ul> */}
-            <ModalConfirmMeal
-                buttonLabel="Add to Meal"
-                className="food-modal" 
-                displayName={displayName} />
+            <CardTitle tag='h5'>{displayName}</CardTitle>
+            {NutrientList(food)}
+
                 
                 </CardBody>
                 {/* </Link>  */}
                 
           {/* /> */}
+          <Button onClick={addToMeal(food) }> </Button>
         </Card>
         
         

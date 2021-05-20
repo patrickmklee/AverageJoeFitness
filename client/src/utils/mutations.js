@@ -12,8 +12,8 @@ export const LOGIN = gql`
   }
 `;
 export const ADD_MEAL = gql`
-mutation addMeal($date: String!, $time: String!, $foodName: String!, $calories: Int!) {
-  addMeal(date: $date, time: $time, meal: [{itemName: $foodName, calories: $calories}]) {
+mutation addMeal($date: String!, $time: String!, $itemName: [String!], $calories: Int!) {
+  addMeal(date: $date, time: $time, meal: [{itemName: $itemName, calories: $calories}]) {
      username
       date {
         day
@@ -30,8 +30,7 @@ mutation addMeal($date: String!, $time: String!, $foodName: String!, $calories: 
         }
       }
   }
-  }
-    
+  }    
 `;
 // export const ADD_MEAL = gql`
 //   mutation addMeal

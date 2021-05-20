@@ -17,9 +17,10 @@ export const convertNutrientName = nutrient => {
   return nutrient
 };
 // const generateFilters = () => { return new Set([1008,1003,1004,1005,1093]) }s
-export const generateFilters = filters =>  { return new Set(filters)} ;
+export const generateFilters = ids =>  { return new Set(ids) } ;
 // ,1003,1004,1005,1093]) }
 export const filterNutrients =  (foodNutrients) => foodNutrients.filter(({ nutrientId })  => generateFilters([1008,1003,1004,1005,1093]).has(nutrientId)) 
+export const filterCalories =  (foodNutrients) => foodNutrients.filter(({ nutrientId })  => generateFilters([1008]).has(nutrientId)) 
 
 
 export function idbPromise(storeName, method, object) {

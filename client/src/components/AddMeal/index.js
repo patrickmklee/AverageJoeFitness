@@ -17,6 +17,7 @@ import { Container,
   Col,
   Button,
   Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import SearchPage from '../../pages/SearchPage';
 
 const AddMeal = () => {
 
@@ -139,8 +140,11 @@ const AddMeal = () => {
 
       <Modal isOpen={addModal} toggle={toggleAdd} className="exercise-modal">
         <ModalHeader toggle={toggleAdd}></ModalHeader>
+        {/* <SearchPage /> */}
         <ModalBody>
-          <h5>Select Date</h5>
+        <SearchPage />
+</ModalBody>
+          {/* <h5>Select Date</h5>
           <Form className="w-100" onSubmit={handleFormSubmit}>
             <FormGroup row>
               <Label for="activity-input" size="lg">
@@ -163,7 +167,7 @@ const AddMeal = () => {
               Submit
             </Button>
           </Form>
-        </ModalBody>
+        </ModalBody> */}
 
         {/* <ModalFooter>
           <Button color="primary" onClick={toggle}>Submit</Button>{' '}

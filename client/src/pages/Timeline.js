@@ -10,12 +10,15 @@ import ScheduleItem from '../components/ScheduleItem';
 import { idbPromise } from '../utils/helpers';
 
 import {
+  Table,
   Row,
   Col,
   Container
 } from 'reactstrap';
 
-const getSchedule = (timeline) => timeline.reduce((acc,curr)  => (acc[curr]='',acc),{});
+const keySchedule =  ({date})  => {
+  return date.reduce((acc,curr)  => (acc[curr]='',acc),{}) 
+}
 
 const Timeline = () => {
     const [state, dispatch] = useScheduleContext();
@@ -44,15 +47,16 @@ const Timeline = () => {
         //   forEach(({schedule}) => {
             idbPromise('timeline', 'put', data.timeline);
         //   });
-      } else if (!loading) {
-        idbPromise('timeline', 'get').then((timeline) => {
-          dispatch({
-            type: UPDATE_TIMELINE,
-            timeline: timeline
-         });
-        });
       }
-    }, [data, loading, dispatch]);
+      //  else if (!loading) {
+      //   idbPromise('timeline', 'get').then((timeline) => {
+      //     dispatch({
+      //       type: UPDATE_TIMELINE,
+      //       timeline: timeline
+      //    });
+      //   });
+      // }
+    }, [timeline, loading]);
 // const [state, dispatch] = useMealContext();
 // const {loading, error, data } = useQuery(QUERY_TIMELINE);
 // const [getTimeline, { data }] = useLazyQuery(QUERY_TIMELINE);
@@ -100,45 +104,72 @@ const Timeline = () => {
 //   if (error) return `Error! ${error.message}`;
 
 
-  function ListItem(props) {
+
+  function TableHeadingItem(props) {
     // Correct! There is no need to specify the key here:
-    return <li>{props.value}</li>;
+    return <th>{props.value}</th>
+  }
+  function TableHeading(props) {
+    console.log('in TAble head');  
+    console.log(props);
+    // const {_id, date} = props.timeline;
+    const {_id,...timeline} = props.timeline;
+    console.log(_id)
+    console.log(timeline)
+
+    // console.log(date);
+    return (
+      <tr>
+      {timeline.date.map(date => (
+        <TableHeadingItem key={date._id} value={date.day} />
+      ))}
+      </tr>
+    
+    )
   }
   
 function DayList(props) {
-    const days = props.date;
-    console.log('in DayList');
-    console.log(days);
+  console.log('in DayList');  
+  console.log(props);
+  console.log(props);
+  // const {_id, date} = props.timeline;
+  const {_id,...timeline} = props.timeline;
+  console.log(_id)
+  console.log(timeline)
     return (
-        <Row>
-       {days.map( day => (
-       <Col xs="12" md="3" key={day._id}>
-          {/* {day.map(schedule)=> ( */}
-           <ScheduleItem
-           schedule={day.schedule}
-           />
-        {/* ) */}
-        </Col>
-
+      // <Row> {timeline.date} </Row>
+      <tbody >
+        {timeline.date.map( (date) => (
+      // <table>
+          <ScheduleItem key={date._id} schedule={date} />
+        ))}
+            
         
-    ))}
-    </Row>
+    
+      
+      </tbody>
+    )}
 
-    )
-          };
-
+console.log('===================================')
   console.log("Finished Loading");
   console.log(data);
   console.log(loggedIn);
+  
     return(
-      <Container fluid>
-        { (~state.searchCriteria||null)&&data&&loggedIn ? (
-
-          DayList(data.timeline)
-        ) : null}
-      </Container>
+      <div>
+      { (~(state.searchCriteria||null)&&data&&loggedIn) ? (
+      <table className="table px-3">
+        <thead className="display-4">
+          <TableHeading timeline={data.timeline}/>
+        </thead>
+        <DayList timeline={data.timeline} />
+      </table>
+      ) : (
+        null 
+      )}
+    </div>
     )
-    }
-
+      };
+  
   
     export default Timeline;

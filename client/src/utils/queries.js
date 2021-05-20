@@ -8,6 +8,8 @@ export const QUERY_TIMELINE = gql`
       date {
         _id
         day
+        totalBurnedCalories
+        totalConsumedCalories
         schedule {
           _id
           time
@@ -16,11 +18,13 @@ export const QUERY_TIMELINE = gql`
             itemName
             calories
           }
+          mealTotalCalories
+          exerciseTotalCalories
           exercise {
-            _id
             category
             duration
           }
+          
         }
     }
   }
@@ -58,6 +62,7 @@ query me {
     date {
       day
       schedule {
+        _id
         time
         meal {
           itemName

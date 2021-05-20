@@ -16,7 +16,7 @@ import { UPDATE_SEARCH_CRITERIA, UPDATE_FOODS_RESULTS, UPDATE_TIMELINE } from '.
 import { QUERY_ME_BASIC, QUERY_ME, QUERY_TIMELINE } from '../utils/queries';
 import { ADD_MEAL } from '../utils/mutations';
 
-import { idbPromise } from '../utils/helpers';
+import { filterCalories, filterNutrients, idbPromise } from '../utils/helpers';
 
 import {
   Container,
@@ -32,10 +32,11 @@ import {
   Button,
   Modal, ModalHeader, ModalBody, ModalFooter
 } from 'reactstrap';
-import ModalConfirmMeal from '../components/ModalConfirmMeal';
+const getDisplayName = (food) => {
+  return `${food.dataType === 'Branded' && food.brandName ? food.brandName : ''} ${food.lowercaseDescription}`
+}
 
 
-const getDisplayName = function(food) { return `${food.dataType === 'Branded' && food.brandName ? food.brandName : ''} ${food.lowercaseDescription}`}
 
 const SearchPage = () => {
   const [state, dispatch] = useScheduleContext();
@@ -91,9 +92,9 @@ const SearchPage = () => {
     fetchFoodData();
       
       
-    }, [currentSearch, loading, dispatch]);
+    }, [currentSearch, dispatch]);
 
-
+  // console.log(filterNutrients(state.foods));
   const handleFormSubmit =  (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -104,6 +105,7 @@ const SearchPage = () => {
     setCurrentSearch(searchInput);
   };
   
+
     return (
       <div>
         <Container>
@@ -135,19 +137,16 @@ const SearchPage = () => {
       <Container fluid>
         {state.foods.length ? (
         <Row className="flex-row">
-        
-          {state.foods.map( (food,index)  => ( 
-          <FoodItem
-            key={index}
-            _id={food.fdcId}
-            displayName={getDisplayName(food)}
-            fdcId={food.fdcId}
-            // setModal={setModal}
-            dataType={food.dataType}
-            foodName={food.lowercasedescription}
-            foodCategories={food.foodCategory}  
-            foodNutrients={food.foodNutrients}
-          /> 
+          {state.foods.map( (food)  => ( 
+            <FoodItem
+              calories={filterCalories(food.foodNutrients)}
+              key={food.fdcId}
+              fdcId={food.fdcId}
+              dataType={food.dataType}
+              displayName={getDisplayName(food)}
+              foodCategories={food.foodCategory}  
+              foodNutrients={food.foodNutrients}
+            /> 
           
           ))}
         
