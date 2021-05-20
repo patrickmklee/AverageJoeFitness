@@ -151,7 +151,7 @@ const AddMeal = () => {
 
   return (
     <div>
-      <Button color="secondary" onClick={toggle}>Record Your Meal</Button>
+      <Button color="secondary" onClick={toggle}>Add Your Meal</Button>
       <Modal isOpen={mealModal} toggle={toggle} className="exercise-modal">
         <ModalHeader toggle={toggle}></ModalHeader>
         <ModalBody>
