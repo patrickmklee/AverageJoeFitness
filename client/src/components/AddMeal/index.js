@@ -1,8 +1,11 @@
-import { assertLeafType } from 'graphql';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import Calendar from 'react-calendar';
 import { ADD_MEAL } from '../../utils/mutations';
+import FoodItem from '../FoodItem';
+import { useScheduleContext } from "../../utils/GlobalState";
+import {FdcSearchFood} from '../../utils/API.js';
+import { UPDATE_SEARCH_CRITERIA, UPDATE_FOODS_RESULTS, UPDATE_TIMELINE } from '../../utils/actions';
+import { idbPromise, filterNutrients } from '../../utils/helpers';
 
 import { Container,
   Card,
@@ -16,17 +19,25 @@ import { Container,
   Row,
   Col,
   Button,
-  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+  Modal, ModalHeader, ModalBody, ModalFooter, CardHeader, CardTitle } from 'reactstrap';
+
+const getDisplayName = function(food) { return `${food.dataType === 'Branded' && food.brandName ? food.brandName : ''} ${food.lowercaseDescription}`}
 
 const AddMeal = () => {
 
+  const [state, dispatch] = useScheduleContext();
+  const { foods } = state;
+
   const [date, setDate] = useState('');
 
-  const [calendar, setCalendar] = useState(new Date());
+  const [searchInput, setSearchInput] = useState('');
+  const [currentSearch, setCurrentSearch] = useState('');
   
   const [mealModal, setMealModal] = useState(false);
 
   const [addModal, setAddModal] = useState(false);
+
+  const [currentFood, setCurrentFood] = useState({});
   
   const toggle = () => setMealModal(!mealModal);
 
@@ -34,51 +45,109 @@ const AddMeal = () => {
 
   const [addMeal, { error }] = useMutation(ADD_MEAL)
 
+  useEffect(() => {
+    async function fetchFoodData() {
+      console.log('searchPage useEffect')
+      console.log(state);
+      if (currentSearch !== '') {
+        try {
+          const response = await FdcSearchFood(process.env.REACT_APP_USDA_API_KEY, currentSearch);
+          if (!response.ok) {
+            throw new Error('something went wrong!');
+          }
+          const data = await response.json();
+          dispatch({
+            type: UPDATE_FOODS_RESULTS,
+            foods: data.foods,
+          })
+          data.foods.forEach((food) => {
+            idbPromise('foods', 'put', food);
+          });
+
+        } catch (err) {
+          console.error(err);
+        }
+
+      } else {
+        const foods = await idbPromise('foods', 'get');
+        // .then((foods) => {
+        dispatch({
+          type: UPDATE_FOODS_RESULTS,
+          foods: {
+            foods
+          },
+        });
+        //   })
+      }
+    }
+
+    fetchFoodData();
+
+
+  }, [currentSearch, dispatch]);
+
   async function handleFormSubmit(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    // console.log(document.getElementById("date-input").value);
-    // console.log(document.getElementById("time-input").value);
-    // console.log(document.getElementById("activity-input").value);
-    // console.log(document.getElementById("duration-input").value);
+    // console.log(currentFood);
+    console.log(currentFood.foodNutrients.filter(function(nutrient) {
+      return nutrient.nutrientId == 1008;
+    }));
 
-    // try {
-    //   await addExercise({
-    //     variables: {
-    //       date: document.getElementById("date-input").value, 
-    //       time: document.getElementById("time-input").value,
-    //       category: document.getElementById("activity-input").value,
-    //       duration: Math.floor(document.getElementById("duration-input").value)
-    //     }
-    //   });
+    try {
+      await addMeal({
+        variables: {
+          date: document.getElementById("date-input").value, 
+          time: document.getElementById("time-input").value,
+          fdcId: currentFood.fdcId,
+          foodName: currentFood.description,
+          calories: Math.floor(currentFood.foodNutrients.filter(function(nutrient) {
+            return nutrient.nutrientId == 1008;
+          })[0].value)
+        }
+      });
 
-    //   // clear form value
-    //   // setBody('');
-    //   // setCharacterCount(0);
-    // } catch (e) {
-    //   console.error(e);
-    // }
+      // clear form value
+      // setBody('');
+      // setCharacterCount(0);
+    } catch (e) {
+      console.error(e);
+    }
 
     toggle();
   };
 
-  // function getDate(value, event) {
-  //   // console.log(event);
-  //   if(event.target.getAttribute("aria-label")) {
-  //     var newDate = event.target.getAttribute("aria-label");
-  //   }
-  //   else {
-  //     var newDate = event.target.firstChild.ariaLabel;
-  //   }
+  const handleSearchSubmit =  (event) => {
+    event.preventDefault();
+    event.stopPropagation();
 
-  //   setDate(newDate);
+    console.log("TEST");
 
-  //   toggleCal();
-  //   if (!mealModal){
-  //     toggle();
-  //   }
-  // }
+    if (!searchInput ||  (currentSearch===searchInput )){
+      console.log("TEST");
+      return false;
+    } 
+    setCurrentSearch(searchInput);
+  };
+
+  function ListItem(props) {
+    return <li>{props.value}</li>;
+  }
+  
+  function NutrientList(props) {
+    const nutrients = props.foodNutrients;
+
+    return (
+      <ul>
+      
+      {filterNutrients(nutrients).map( nutrient =>
+      <ListItem key={nutrient.nutrientId} value={`${nutrient.nutrientName}: ${nutrient.value} ${nutrient.unitName}`} />
+      )}
+      </ul>
+      // </ListItem>
+    )
+  };
 
   return (
     <div>
@@ -122,6 +191,7 @@ const AddMeal = () => {
                   type="text"
                   name="exerciseInput"
                   id="activity-input"
+                  value={currentFood.description}
                   disabled
                 />
               </Col>
@@ -140,29 +210,61 @@ const AddMeal = () => {
       <Modal isOpen={addModal} toggle={toggleAdd} className="exercise-modal">
         <ModalHeader toggle={toggleAdd}></ModalHeader>
         <ModalBody>
-          <h5>Select Date</h5>
-          <Form className="w-100" onSubmit={handleFormSubmit}>
-            <FormGroup row>
-              <Label for="activity-input" size="lg">
-                Search for food
+          <h5>Add Meal Item</h5>
+          <Form  className="w-100" onSubmit={handleSearchSubmit}>
+            <FormGroup>
+              <Label for="Search" size="lg">
+              Search for a Food
               </Label>
-              <Col sm={3}>
-                <Button color="danger" onClick={toggleAdd}>
-                  Add Item
-                </Button>
-              </Col>
-              <Col sm={9}>
-                <Input
-                  type="text"
-                  name="exerciseInput"
-                  id="activity-input"
-                />
-              </Col>
+              <Input
+                type="text"
+                name="searchInput"
+                value={searchInput}
+                onChange={e => setSearchInput(e.target.value)}
+              />
             </FormGroup>
             <Button color="danger" type="submit">
-              Submit
+              Search
             </Button>
           </Form>
+          <Container fluid>
+            {state.foods.length ? (
+            <Row className="flex-row">
+            
+              {state.foods.map( (food,index) => ( 
+                // <FoodItem
+                //   key={index}
+                //   _id={food.fdcId}
+                //   displayName={getDisplayName(food)}
+                //   fdcId={food.fdcId}
+                //   // setModal={setModal}
+                //   dataType={food.dataType}
+                //   foodName={food.lowercasedescription}
+                //   foodCategories={food.foodCategory}  
+                //   foodNutrients={food.foodNutrients}
+                // />
+
+                <Col xs='12' md='12'>
+                  <Card className="w-100" color='light'>
+                    <CardHeader>{food.foodCategories}</CardHeader>
+                    <CardBody>
+                      <CardTitle tag='h5'>{getDisplayName(food)}</CardTitle>
+                      {NutrientList(food)}
+                      {/* <ModalConfirmMeal buttonLabel="Add to Meal" className="food-modal" displayName={displayName} /> */}
+                      {/* <Button onClick={(e) => { func1(); func2(); } }>Add to Meal</Button> */}
+                      <Button onClick={() => {setCurrentFood(food); toggleAdd(); console.log(currentFood.description);} }>Add to Meal</Button>
+                      {/* <Button onClick={() => {console.log(currentFood.description);} }>Add to Meal</Button> */}
+                    </CardBody>
+                  </Card>
+                </Col>
+
+                ))}
+
+              </Row> ) : (
+                null
+              )
+            }
+          </Container>
         </ModalBody>
 
         {/* <ModalFooter>

@@ -119,7 +119,7 @@ const FoodItem = ( item ) => {
         )
     };
     return (
-    <Col xs='12' md='3'>
+    <Col xs='12' md='12'>
         
         <Card className="w-100" color='light' >
             
