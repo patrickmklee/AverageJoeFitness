@@ -1,7 +1,5 @@
-import { assertLeafType } from 'graphql';
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import Calendar from 'react-calendar';
 import { ADD_EXERCISE } from '../../utils/mutations';
 
 import { Container,
@@ -17,19 +15,13 @@ import { Container,
   Button,
   Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
-const ModalConfirmMeal = () => {
+const AddExercise = () => {
 
   const [date, setDate] = useState('');
-
-  const [calendar, setCalendar] = useState(new Date());
   
   const [exerciseModal, setExerciseModal] = useState(false);
-
-  const [calModal, setCalModal] = useState(false);
   
   const toggle = () => setExerciseModal(!exerciseModal);
-
-  const toggleCal = () => setCalModal(!calModal);
 
   const [addExercise, { error }] = useMutation(ADD_EXERCISE)
 
@@ -62,26 +54,9 @@ const ModalConfirmMeal = () => {
     toggle();
   };
 
-  function getDate(value, event) {
-    // console.log(event);
-    if(event.target.getAttribute("aria-label")) {
-      var newDate = event.target.getAttribute("aria-label");
-    }
-    else {
-      var newDate = event.target.firstChild.ariaLabel;
-    }
-
-    setDate(newDate);
-
-    toggleCal();
-    if (!exerciseModal){
-      toggle();
-    }
-  }
-
   return (
     <div>
-      <Button color="secondary" onClick={toggleCal}>Add Exercise</Button>
+      <Button color="secondary" onClick={toggle}>Add Your Exercise</Button>
       <Modal isOpen={exerciseModal} toggle={toggle} className="exercise-modal">
         <ModalHeader toggle={toggle}></ModalHeader>
         <ModalBody>
@@ -92,18 +67,17 @@ const ModalConfirmMeal = () => {
                 Date
               </Label>
               <Input
-                type="text"
+                type="date"
                 name="dateInput"
                 value={date}
                 onChange={e => setDate(e.target.value)}
-                onClick={toggleCal}
                 id="date-input"
               />
               <Label for="date-input" size="lg">
                 Time
               </Label>
               <Input
-                type="text"
+                type="time"
                 name="timeInput"
                 id="time-input"
               />
@@ -137,24 +111,8 @@ const ModalConfirmMeal = () => {
           <Button color="secondary" onClick={toggle}>Cancel</Button>
         </ModalFooter> */}
       </Modal>
-
-      <Modal isOpen={calModal} toggle={toggleCal} className="exercise-modal">
-        <ModalHeader toggle={toggleCal}></ModalHeader>
-        <ModalBody>
-          <h5>Select Date</h5>
-          <Calendar
-            onChange={setCalendar}
-            onClickDay={getDate}
-            value={calendar}
-          />
-        </ModalBody>
-        {/* <ModalFooter>
-          <Button color="primary" onClick={toggle}>Submit</Button>{' '}
-          <Button color="secondary" onClick={toggle}>Cancel</Button>
-        </ModalFooter> */}
-      </Modal>
     </div>
   );
 }
 
-export default ModalConfirmMeal;
+export default AddExercise;

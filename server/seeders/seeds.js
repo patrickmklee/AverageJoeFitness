@@ -22,7 +22,7 @@ db.once('open', async () => {
   const timeline = await Timeline.create({
     username: user.username,
     date: [{
-        day: "02-13-2021",
+        day: "2021-02-13",
         schedule: [{
           time: "8:00",
           meal: [{
@@ -45,9 +45,9 @@ db.once('open', async () => {
         }]
       },
       {
-        day: "02-14-2021",
+        day: "2021-02-14",
         schedule: [{
-            time: "4:00pm",
+            time: "4:00",
             meal: [{
                 fdcId: 3,
                 itemName: "burger",
@@ -73,7 +73,7 @@ db.once('open', async () => {
             }
           },
           {
-            time: "8:00pm",
+            time: "8:00",
             meal: [{
                 fdcId: 7,
                 itemName: "fries",
@@ -96,7 +96,7 @@ db.once('open', async () => {
         ]
       },
       {
-        day: "02-15-2021",
+        day: "2021-02-15",
         schedule: [{
             time: "6:00",
             meal: [{
