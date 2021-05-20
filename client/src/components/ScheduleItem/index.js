@@ -63,7 +63,15 @@ const ScheduleItem = ({schedule}) => {
                 </div>
             ) : ( null )
              }
-        
+            <tr>
+            <th>Daily Calories</th>
+            <td right>{rest.totalConsumedCalories}</td>
+            </tr>
+            <tr>
+            <th>Calories Burned</th>
+            <td right>{rest.totalBurnedCalories}</td>
+            </tr>
+          
         </CardBody>
         </Card>
         ))}    

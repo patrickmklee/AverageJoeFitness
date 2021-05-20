@@ -14,7 +14,7 @@ const Home = () => {
           <AddExercise />
         </div>
         <div className="col-sm-9">
-          {/* <AddMeal /> */}
+          <AddMeal />
         </div>
       </div>
       <div className="row">

@@ -144,9 +144,10 @@ function DayList(props) {
           <ScheduleItem key={date._id} schedule={date} />
         ))}
             
-        
+          
     
-      
+          
+
       </tbody>
     )}
 

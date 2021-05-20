@@ -211,21 +211,11 @@ const AddMeal = () => {
         <ModalHeader toggle={toggleAdd}></ModalHeader>
         {/* <SearchPage /> */}
         <ModalBody>
-<<<<<<< HEAD
-        <SearchPage />
-</ModalBody>
-          {/* <h5>Select Date</h5>
-          <Form className="w-100" onSubmit={handleFormSubmit}>
-            <FormGroup row>
-              <Label for="activity-input" size="lg">
-                Search for food
-=======
           <h5>Add Meal Item</h5>
           <Form  className="w-100" onSubmit={handleSearchSubmit}>
             <FormGroup>
               <Label for="Search" size="lg">
               Search for a Food
->>>>>>> 5ea891881426a805f4139a1e4ffe81bc2c4c289f
               </Label>
               <Input
                 type="text"
@@ -238,9 +228,6 @@ const AddMeal = () => {
               Search
             </Button>
           </Form>
-<<<<<<< HEAD
-        </ModalBody> */}
-=======
           <Container fluid>
             {state.foods.length ? (
             <Row className="flex-row">
@@ -280,7 +267,6 @@ const AddMeal = () => {
             }
           </Container>
         </ModalBody>
->>>>>>> 5ea891881426a805f4139a1e4ffe81bc2c4c289f
 
         {/* <ModalFooter>
           <Button color="primary" onClick={toggle}>Submit</Button>{' '}
