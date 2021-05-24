@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, ObjectIds } = require('mongoose');
 const User = require('./User');
 
 const timelineSchema = new Schema(
@@ -7,62 +7,90 @@ const timelineSchema = new Schema(
       type: String,
       ref: 'User'
     },
-    date: [
-      {
-        day: {
-          type: String,
-          required: true,
-          unique: true,
-        },
-        schedule: [
-          {
-            time: {
-              type: String,
-              required: true,
-              unique: true,
-            },
-            meal: [
-              {
-                fdcId: {
-                  type: Number,
-                  required: true
-                },
-                itemName: {
+    date: {
+      default: undefined,
+      unique: false,
+      sparse: true,
+      // index: false,
+      type: [
+        {
+          day: {
+            type: String,
+            default: null,
+            // sparse: true,
+            index: false
+            // required: true,
+            // unique: true,
+          },
+          schedule: [
+            {
+              time: {
+                type: String,
+                default: undefined,
+                sparse: true
+                // required: true,
+                // unique: true,
+              },
+              meal: [
+                {
+                  fdcId: {
+                    type: Number,
+                    default: undefined,
+                    sparse: true
+                    // required: true
+                  },
+                  itemName: {
+                    type: String,
+                    default: undefined,
+                    sparse: true
+                    // required: true
+                  },
+                  quantity: {
+                    type: Number,
+                    default: undefined,
+                    sparse: true
+                    // required: true
+                  },
+                  calories: {
+                    type: Number,
+                    default: undefined,
+                    sparse: true
+                    // required: true
+                  }
+                }
+              ],
+              exercise: {
+                category: {
                   type: String,
-                  required: true
+                  default: undefined
+                  // required: true
                 },
-                quantity: {
+                duration: {
                   type: Number,
-                  required: true
-                },
-                calories: {
-                  type: Number,
-                  required: true
+                  default: undefined
+                  // required: true
                 }
               }
-            ],
-            exercise: {
-              category: {
-                type: String,
-                required: true
-              },
-              duration: {
-                type: Number,
-                required: true
-              }
             }
-          }
-        ]
-      }
-    ]
+          ]
+        }
+      ]
+    }
   },
   {
     toJSON: {
       getters: true,
       virtuals: true
-    }
+    },
+    autoIndex: false
   }
 );
+
+timelineSchema.path('date').index({ sparse: true });
+timelineSchema.path('date').index({ day_1: 1 }, { sparse: true });
+timelineSchema.path('date').index({ day: 1 }, { partialFilterExpression: { day: { $ne: null } } });
+timelineSchema.index({ date: 1 }, { partialFilterExpression: { date: { $ne: null } } });
+timelineSchema.index({ 'date.day': 1 }, { partialFilterExpression: { 'date.day': { $ne: null } } });
 
 timelineSchema.path('date').schema.path('schedule').schema.virtual('mealTotalCalories').get(function(){
   // console.log(this.meal.reduce((total, obj) => obj.calories + total,0));

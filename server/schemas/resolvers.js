@@ -30,14 +30,25 @@ const resolvers = {
       const user = await User.create(args);
       const token = signToken(user);
 
-      const timeline = await Timeline.create({ username: user.username });
-  
+      // const timeline = await Timeline.create({ username: user.username, date: [{ schedule: [{ meal: [] }] }] }, function(err) {
+      //   console.log(err);
+      // });
+
+      const myTimeline = await Timeline.create({ username: user.username, date: [] })
+      .catch( (err) => {
+        console.log("\nERR\n")
+        console.log(err);
+      });
+      
+      console.log("\nTIMELINE DONE\n");
       await User.findByIdAndUpdate(
         { _id: user._id },
-        { timeline: timeline._id },
-        { new: true }
+        { timeline: myTimeline._id },
+        { new: true },
+        (err, doc) => {console.log(err)}
       );
-  
+      
+      console.log("END");
       return { token, user };
     },
 

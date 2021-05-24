@@ -7,4 +7,6 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/average-joe-fit
   useFindAndModify: false
 });
 
+mongoose.set('debug', true);
+
 module.exports = mongoose.connection;

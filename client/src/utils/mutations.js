@@ -48,8 +48,8 @@ export const ADD_FOOD = gql`
   // addUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password) {
 
 export const ADD_USER = gql`
-  mutation addUser($username: String!, $email: String!, $password: String!) {
-    addUser(username: $username,  email: $email, password: $password) {
+  mutation addUser($username: String!, $email: String!, $password: String! $age: Int!, $gender: String!, $height: Int!, $weight: Int!) {
+    addUser(username: $username, email: $email, password: $password, age: $age, gender: $gender, height: $height, weight: $weight) {
       token
       user {
         _id
