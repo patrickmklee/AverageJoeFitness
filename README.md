@@ -48,6 +48,12 @@ localhost:3000
 
 On the landing page a user can log in or create an account. Once logged in, users can add meal and exercise information to track calories consumed and burned.
 
+## Example Deployment
+
+Visit an [example deployment](https://mysterious-crag-12899.herokuapp.com/).
+
+![Example Image](https://github.com/patrickmklee/AverageJoeFitness/blob/main/example_site.png?raw=true)
+
 ## Questions
 
 Direct questions to:
