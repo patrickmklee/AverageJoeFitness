@@ -66,12 +66,15 @@ const timelineSchema = new Schema(
 
 timelineSchema.path('date').schema.path('schedule').schema.virtual('mealTotalCalories').get(function(){
   // console.log(this.meal.reduce((total, obj) => obj.calories + total,0));
-  return this.meal.reduce((total, obj) => obj.calories + total, 0);
+  return this.meal.reduce((total, obj) => (obj.calories ? obj.calories : 0) + total, 0);
 });
 
 timelineSchema.path('date').schema.virtual('totalConsumedCalories').get(function(){
   // console.log(this.meal.reduce((total, obj) => obj.calories + total,0));
-  return this.schedule.reduce((total, obj) => obj.mealTotalCalories + total, 0);
+  return this.schedule.reduce((total, obj) =>
+  {
+    (obj.mealTotalCalories ? obj.mealTotalCalories : 0) + total
+  }, 0);
 });
 
 timelineSchema.path('date').schema.path('schedule').schema.virtual('exerciseTotalCalories').get(async function(){
@@ -81,7 +84,7 @@ timelineSchema.path('date').schema.path('schedule').schema.virtual('exerciseTota
   })
   .select('username weight');
   const met = 5;
-  const caloriesBurned = this.exercise.duration * met * 3.5 * ( userInfo.weight / 2.2046 ) / 200;
+  const caloriesBurned = (this.exercise.duration ? this.exercise.duration * met * 3.5 * ( userInfo.weight / 2.2046 ) / 200 : 0);
   return Math.round(caloriesBurned);
 });
 
@@ -92,7 +95,7 @@ timelineSchema.path('date').schema.virtual('totalBurnedCalories').get(async func
   .select('username weight');
 
   const totalDuration = this.schedule.reduce((total, obj) => {    
-    return total + obj.exercise.duration;
+    return total + (obj.exercise.duration ? obj.exercise.duration : 0);
   }, 0);
 
   const met = 5;

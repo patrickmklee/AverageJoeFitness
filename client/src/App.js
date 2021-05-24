@@ -5,15 +5,12 @@ import ApolloClient from 'apollo-boost';
 
 
 import Home from './pages/Home';
-import SearchPage from './pages/SearchPage';
 import Detail from './pages/Detail';
 import NoMatch from "./pages/NoMatch";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Timeline from './pages/Timeline';
 import Nav from './components/Nav';
-import dayjs from 'dayjs';
-
 
 import {ScheduleProvider} from './utils/GlobalState'
 
@@ -35,7 +32,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Router>
-        <div>
+        <div className="container">
         <ScheduleProvider>
 
         <Nav />
@@ -44,12 +41,18 @@ function App() {
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/timeline" component={Timeline} />
-            {/* <Route exact path="/addMeal" component={SearchPage} /> */}
-            <Route exact path="/foods/:id" component={Detail} />
+            {/* <Route exact path="/addMeal" component={SearchPage} />
+            <Route exact path="/foods/:id" component={Detail} /> */}
 
             <Route component={NoMatch} />
 
             </Switch>
+        
+            <footer className="text-muted py-5 border-top mt-4">
+              <div className="container">
+                <p className="mb-0">Average Joe Fitness source code on <a href="https://github.com/patrickmklee/AverageJoeFitness" target="_blank">GitHub</a>.</p>
+              </div>
+            </footer>
         </ScheduleProvider>
         </div>
       </Router>

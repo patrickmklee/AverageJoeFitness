@@ -1,25 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { ADD_MEAL } from '../../utils/mutations';
-import FoodItem from '../FoodItem';
 import { useScheduleContext } from "../../utils/GlobalState";
 import {FdcSearchFood} from '../../utils/API.js';
-import { UPDATE_SEARCH_CRITERIA, UPDATE_FOODS_RESULTS, UPDATE_TIMELINE } from '../../utils/actions';
+import { UPDATE_FOODS_RESULTS } from '../../utils/actions';
 import { idbPromise, filterNutrients } from '../../utils/helpers';
 
-import { Container,
-  Card,
-  CardBody,
-  Form,
-  FormGroup,
-  FormText,
-  Label,
-  InputGroup,
-  Input,
-  Row,
-  Col,
-  Button,
-  Modal, ModalHeader, ModalBody, ModalFooter, CardHeader, CardTitle } from 'reactstrap';
+import { Container, Card, CardBody, Form, FormGroup, Label, Input, Row, Col, Button, Modal, ModalHeader, ModalBody, CardHeader, CardTitle } from 'reactstrap';
 
 const getDisplayName = function(food) { return `${food.dataType === 'Branded' && food.brandName ? food.brandName : ''} ${food.lowercaseDescription}`}
 
@@ -47,14 +34,15 @@ const AddMeal = () => {
 
   useEffect(() => {
     async function fetchFoodData() {
-      console.log('searchPage useEffect')
-      console.log(state);
+      // console.log('searchPage useEffect')
+      // console.log(state);
       if (currentSearch !== '') {
         try {
           const response = await FdcSearchFood(process.env.REACT_APP_USDA_API_KEY, currentSearch);
           if (!response.ok) {
             throw new Error('something went wrong!');
           }
+          // console.log(response);
           const data = await response.json();
           dispatch({
             type: UPDATE_FOODS_RESULTS,
@@ -70,14 +58,12 @@ const AddMeal = () => {
 
       } else {
         const foods = await idbPromise('foods', 'get');
-        // .then((foods) => {
         dispatch({
           type: UPDATE_FOODS_RESULTS,
           foods: {
             foods
           },
         });
-        //   })
       }
     }
 
@@ -90,10 +76,9 @@ const AddMeal = () => {
     event.preventDefault();
     event.stopPropagation();
 
-    // console.log(currentFood);
-    console.log(currentFood.foodNutrients.filter(function(nutrient) {
-      return nutrient.nutrientId == 1008;
-    }));
+    // console.log(currentFood.foodNutrients.filter(function(nutrient) {
+    //   return nutrient.nutrientId == 1008;
+    // }));
 
     try {
       await addMeal({
@@ -108,9 +93,6 @@ const AddMeal = () => {
         }
       });
 
-      // clear form value
-      // setBody('');
-      // setCharacterCount(0);
     } catch (e) {
       console.error(e);
     }
@@ -122,10 +104,10 @@ const AddMeal = () => {
     event.preventDefault();
     event.stopPropagation();
 
-    console.log("TEST");
+    // console.log("TEST");
 
     if (!searchInput ||  (currentSearch===searchInput )){
-      console.log("TEST");
+      // console.log("TEST");
       return false;
     } 
     setCurrentSearch(searchInput);
@@ -145,17 +127,16 @@ const AddMeal = () => {
       <ListItem key={nutrient.nutrientId} value={`${nutrient.nutrientName}: ${nutrient.value} ${nutrient.unitName}`} />
       )}
       </ul>
-      // </ListItem>
     )
   };
 
   return (
-    <div>
-      <Button color="secondary" onClick={toggle}>Add Your Meal</Button>
+    <>
+      <Button color="primary" onClick={toggle} className="my-2">Add Your Meal</Button>
       <Modal isOpen={mealModal} toggle={toggle} className="exercise-modal">
         <ModalHeader toggle={toggle}></ModalHeader>
         <ModalBody>
-          <h5>Exercise</h5>
+          <h5>Meal</h5>
           <Form className="w-100" onSubmit={handleFormSubmit}>
             <FormGroup>
               <Label for="date-input" size="lg">
@@ -196,20 +177,15 @@ const AddMeal = () => {
                 />
               </Col>
             </FormGroup>
-            <Button color="danger" type="submit">
+            <Button color="danger" type="submit" className="mt-3">
               Submit
             </Button>
           </Form>
         </ModalBody>
-        {/* <ModalFooter>
-          <Button color="primary" onClick={toggle}>Submit</Button>{' '}
-          <Button color="secondary" onClick={toggle}>Cancel</Button>
-        </ModalFooter> */}
       </Modal>
 
       <Modal isOpen={addModal} toggle={toggleAdd} className="exercise-modal">
         <ModalHeader toggle={toggleAdd}></ModalHeader>
-        {/* <SearchPage /> */}
         <ModalBody>
           <h5>Add Meal Item</h5>
           <Form  className="w-100" onSubmit={handleSearchSubmit}>
@@ -224,56 +200,41 @@ const AddMeal = () => {
                 onChange={e => setSearchInput(e.target.value)}
               />
             </FormGroup>
-            <Button color="danger" type="submit">
+            <Button color="danger" type="submit" className="mt-3">
               Search
             </Button>
           </Form>
-          <Container fluid>
+          <div>
             {state.foods.length ? (
-            <Row className="flex-row">
+            <div className="flex-row">
             
               {state.foods.map( (food,index) => ( 
-                // <FoodItem
-                //   key={index}
-                //   _id={food.fdcId}
-                //   displayName={getDisplayName(food)}
-                //   fdcId={food.fdcId}
-                //   // setModal={setModal}
-                //   dataType={food.dataType}
-                //   foodName={food.lowercasedescription}
-                //   foodCategories={food.foodCategory}  
-                //   foodNutrients={food.foodNutrients}
-                // />
 
-                <Col xs='12' md='12'>
+                <Col xs='12' md='12' className="mt-3">
                   <Card className="w-100" color='light'>
-                    <CardHeader>{food.foodCategories}</CardHeader>
+                    <CardHeader>{food.foodCategory}</CardHeader>
+                    {/* <CardHeader>{food.foodCategories}</CardHeader> */}
+                    {/* <CardHeader>FOOD</CardHeader> */}
                     <CardBody>
                       <CardTitle tag='h5'>{getDisplayName(food)}</CardTitle>
                       {NutrientList(food)}
-                      {/* <ModalConfirmMeal buttonLabel="Add to Meal" className="food-modal" displayName={displayName} /> */}
-                      {/* <Button onClick={(e) => { func1(); func2(); } }>Add to Meal</Button> */}
-                      <Button onClick={() => {setCurrentFood(food); toggleAdd(); console.log(currentFood.description);} }>Add to Meal</Button>
-                      {/* <Button onClick={() => {console.log(currentFood.description);} }>Add to Meal</Button> */}
+                      {/* <Button onClick={() => {setCurrentFood(food); toggleAdd(); console.log(currentFood.description);} }>Add to Meal</Button> */}
+                      <Button onClick={() => {setCurrentFood(food); toggleAdd();} }>Add to Meal</Button>
+
                     </CardBody>
                   </Card>
                 </Col>
 
                 ))}
 
-              </Row> ) : (
+              </div> ) : (
                 null
               )
             }
-          </Container>
+          </div>
         </ModalBody>
-
-        {/* <ModalFooter>
-          <Button color="primary" onClick={toggle}>Submit</Button>{' '}
-          <Button color="secondary" onClick={toggle}>Cancel</Button>
-        </ModalFooter> */}
       </Modal>
-    </div>
+    </>
   );
 }
 

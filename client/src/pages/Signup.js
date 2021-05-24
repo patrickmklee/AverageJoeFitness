@@ -32,55 +32,59 @@ function Signup(props) {
     }
   };
   return (
-    <div className="container my-1">
-      <div className="col-12 col-md-6">
-
-      <Link to="/login">
-        ← Go to Login
-      </Link>
-      </div>
-      <div className="col-12 col-md-6">
-        <div className="card">
-          <h4 className="card-header">Sign Up</h4>
-          <div className="card-body">
-            <form onSubmit={handleFormSubmit}>
-              <input
-                className="form-input"
-                placeholder="Your username"
-                name="username"
-                type="username"
-                id="username"
-                value={formState.username}
-                onChange={handleChange}
-              />
-              <input
-                className="form-input"
-                placeholder="Your email"
-                name="email"
-                type="email"
-                id="email"
-                value={formState.email}
-                onChange={handleChange}
-              />
-              <input
-                className="form-input"
-                placeholder="******"
-                name="password"
-                type="password"
-                id="password"
-                value={formState.password}
-                onChange={handleChange}
-              />
-              <button className="btn d-block w-100" type="submit">
-                Submit
-              </button>
-            </form>
-
-            {error && <div>Signup failed</div>}
+    <main className="text-center">
+      <div className="form-signin col-lg-6 col-md-8 mx-auto">
+        <form onSubmit={handleFormSubmit}>
+          <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
+          <div className="form-floating">
+            <input
+              className="form-input"
+              placeholder="Your username"
+              name="username"
+              type="username"
+              id="username"
+              className="form-control"
+              value={formState.username}
+              onChange={handleChange}
+            />
+            <label htmlFor="email">Username</label>
           </div>
-        </div>
+          <div className="form-floating mt-2">
+            <input
+              className="form-input"
+              placeholder="Your email"
+              name="email"
+              type="email"
+              id="email"
+              className="form-control"
+              value={formState.email}
+              onChange={handleChange}
+            />
+            <label htmlFor="email">Email address</label>
+          </div>
+          <div className="form-floating mt-2">
+            <input
+              className="form-input"
+              placeholder="******"
+              name="password"
+              type="password"
+              id="password"
+              className="form-control"
+              value={formState.password}
+              onChange={handleChange}
+            />
+            <label htmlFor="pwd">Password</label>
+          </div>
+          {
+            error ? <div>
+              <p className="error-text" >The provided credentials are incorrect</p>
+            </div> : null
+          }
+          <button className="w-100 btn btn-lg btn-primary mt-3" type="submit">Sign in</button>
+        </form>
+        {error && <div>Signup failed</div>}
       </div>
-      </div>
+    </main>
   );
 
 }

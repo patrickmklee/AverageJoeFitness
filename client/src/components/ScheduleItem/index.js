@@ -4,8 +4,8 @@ import {Col, Card, Button, CardBody, CardHeader, CardText, List, CardTitle, Card
 
 const ScheduleItem = ({schedule}) => {
     const {day,_id, ...rest} = {...schedule};
-    console.log("In ScheduleItem")
-    console.log(rest);
+    // console.log("In ScheduleItem")
+    // console.log(rest);
     const [...scheduleItem] = rest.schedule;
     // console.log(schedule.schedule);
 

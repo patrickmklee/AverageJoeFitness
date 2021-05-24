@@ -7,55 +7,34 @@ function Nav() {
   function showNavigation() {
     if (Auth.loggedIn()) {
       return (
-        <ul className="flex-row">
-          <li className="mx-1">
-            <Link to="/addMeal">
-              Add a meal
-            </Link>
-          </li>
-          <li className="mx-1">
-            <Link to="/timeline">
-              View Timeline
-            </Link>
-          </li>
-          <li className="mx-1">
-            {/* this is not using the Link component to logout or user and then refresh the application to the start */}
-            <a href="/" onClick={() => Auth.logout()}>
-              Logout
-            </a>
-          </li>
-        </ul>
+        <>
+          <a class="me-3 py-2 text-dark text-decoration-none" href="/" onClick={() => Auth.logout()}>Logout</a>
+        </>
       );
     } else {
       return (
-        <ul className="flex-row">
-          <li className="mx-1">
-            <Link to="/signup">
-              Signup
-            </Link>
-          </li>
-          <li className="mx-1">
-            <Link to="/login">
-              Login
-            </Link>
-          </li>
-        </ul>
+        <>
+          <a class="me-3 py-2 text-dark text-decoration-none" href="/signup">Signup</a>
+          <a class="me-3 py-2 text-dark text-decoration-none" href="/login">Login</a>
+        </>
       );
     }
   }
 
   return (
-    <header className="container-fluid px-1">
-      <h1>
-        <Link to="/">
-          <span role="img" aria-label="shopping bag"> 💪🏽  </span>
-          Average Joe's Fitness
-        </Link>
-      </h1>
+    <header>
 
-      <nav>
-        {showNavigation()}
-      </nav>
+      <div class="d-flex flex-column flex-md-row align-items-center pt-3 pb-3 mb-4 border-bottom container">
+        <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+            <span role="img" aria-label="Logo">💪🏽</span>
+            Average Joe Fitness
+        </a>
+
+        <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
+          {showNavigation()}
+        </nav>
+      </div>
+
     </header>
   );
 }

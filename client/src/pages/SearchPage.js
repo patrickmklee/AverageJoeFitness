@@ -54,8 +54,8 @@ const SearchPage = () => {
     // const foods = searchedFood?.foods||[];
     useEffect( () => {
       async function fetchFoodData() {
-      console.log('searchPage useEffect')
-      console.log(state);
+      // console.log('searchPage useEffect')
+      // console.log(state);
       if (currentSearch !== '') {
         try {
         const response = await FdcSearchFood(process.env.REACT_APP_USDA_API_KEY, currentSearch);

@@ -24,7 +24,7 @@ const FoodItem = ( item ) => {
         ...food
     } = item;
     
-    console.log(state.meal);
+    // console.log(state.meal);
     // const displayName = getDisplayName(item);
     // useEffect( () => {
     //   addMeal = async function()  {
@@ -57,16 +57,16 @@ const FoodItem = ( item ) => {
 
     const addToMeal = (food) => {
         // addToMeal(item)
-        console.log(food)
+        // console.log(food)
         const {...datedItem} = food;
         // const keyNutrients = datedItem.reduce((acc,{nutrientId,...data})  => (acc[nutrientId]=data,acc),{})
         let calories = filterCalories(food.foodNutrients);
         
-        console.log(calories);
+        // console.log(calories);
         datedItem.date = dayjs().format('DD-MM-YYYY');
         
         datedItem.time = dayjs().format('HH:mm') ;//MM-YYYY'); 
-        console.log(datedItem);
+        // console.log(datedItem);
 
         dispatch({
             type: ADD_TO_MEAL,
@@ -105,7 +105,7 @@ const FoodItem = ( item ) => {
       }
       
     function NutrientList(props) {
-        console.log(props);
+        // console.log(props);
         const nutrients = props.foodNutrients;
         return (
             <ul>

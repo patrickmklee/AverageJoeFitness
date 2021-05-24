@@ -2,18 +2,7 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { ADD_EXERCISE } from '../../utils/mutations';
 
-import { Container,
-  Card,
-  CardBody,
-  Form,
-  FormGroup,
-  Label,
-  InputGroup,
-  Input,
-  Row,
-  Col,
-  Button,
-  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Form, FormGroup, Label, Input, Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
 
 const AddExercise = () => {
 
@@ -29,11 +18,6 @@ const AddExercise = () => {
     event.preventDefault();
     event.stopPropagation();
 
-    // console.log(document.getElementById("date-input").value);
-    // console.log(document.getElementById("time-input").value);
-    // console.log(document.getElementById("activity-input").value);
-    // console.log(document.getElementById("duration-input").value);
-
     try {
       await addExercise({
         variables: {
@@ -43,10 +27,6 @@ const AddExercise = () => {
           duration: Math.floor(document.getElementById("duration-input").value)
         }
       });
-
-      // clear form value
-      // setBody('');
-      // setCharacterCount(0);
     } catch (e) {
       console.error(e);
     }
@@ -55,8 +35,8 @@ const AddExercise = () => {
   };
 
   return (
-    <div>
-      <Button color="secondary" onClick={toggle}>Add Your Exercise</Button>
+    <>
+      <Button color="secondary" onClick={toggle} className="my-2 ms-2">Add Your Exercise</Button>
       <Modal isOpen={exerciseModal} toggle={toggle} className="exercise-modal">
         <ModalHeader toggle={toggle}></ModalHeader>
         <ModalBody>
@@ -98,20 +78,16 @@ const AddExercise = () => {
                 id="duration-input"
               />
             </FormGroup>
-            <Button color="danger" type="submit">
+            <Button color="primary" type="submit" className="mt-3">
               Submit
             </Button>
-            <Button color="danger" onClick={toggle}>
+            <Button color="secondary" onClick={toggle} className="mt-3 ms-2">
               Cancel
             </Button>
           </Form>
         </ModalBody>
-        {/* <ModalFooter>
-          <Button color="primary" onClick={toggle}>Submit</Button>{' '}
-          <Button color="secondary" onClick={toggle}>Cancel</Button>
-        </ModalFooter> */}
       </Modal>
-    </div>
+    </>
   );
 }
 

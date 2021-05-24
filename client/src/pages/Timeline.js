@@ -38,7 +38,7 @@ const Timeline = () => {
     // const loggedIn = Auth.loggedIn();
     useEffect(() => {
       if(data) {
-          console.log(data);
+          // console.log(data);
         dispatch({
             type: UPDATE_TIMELINE,
             timeline: {data}
@@ -110,12 +110,12 @@ const Timeline = () => {
     return <th>{props.value}</th>
   }
   function TableHeading(props) {
-    console.log('in TAble head');  
-    console.log(props);
+    // console.log('in TAble head');  
+    // console.log(props);
     // const {_id, date} = props.timeline;
     const {_id,...timeline} = props.timeline;
-    console.log(_id)
-    console.log(timeline)
+    // console.log(_id)
+    // console.log(timeline)
 
     // console.log(date);
     return (
@@ -128,49 +128,62 @@ const Timeline = () => {
     )
   }
   
-function DayList(props) {
-  console.log('in DayList');  
-  console.log(props);
-  console.log(props);
-  // const {_id, date} = props.timeline;
-  const {_id,...timeline} = props.timeline;
-  console.log(_id)
-  console.log(timeline)
-    return (
-      // <Row> {timeline.date} </Row>
-      <tbody >
-        {timeline.date.map( (date) => (
-      // <table>
+  function DayList(props) {
+    // console.log('in DayList');  
+    // console.log(props);
+    // console.log(props);
+    // const {_id, date} = props.timeline;
+    const {_id,...timeline} = props.timeline;
+    // console.log(_id)
+    // console.log(timeline)
+      return (
+        // <Row> {timeline.date} </Row>
+        <tbody >
+          {timeline.date.map( (date) => (
+        // <table>
           <ScheduleItem key={date._id} schedule={date} />
-        ))}
-            
-          
-    
-          
+          ))}
+        </tbody>
+  )}
 
-      </tbody>
-    )}
-
-console.log('===================================')
-  console.log("Finished Loading");
+// console.log('===================================')
+//   console.log("Finished Loading");
+//   console.log(data);
+//   console.log(loggedIn);
   console.log(data);
-  console.log(loggedIn);
-  
-    return(
-      <div>
-      { (~(state.searchCriteria||null)&&data&&loggedIn) ? (
-      <table className="table px-3">
-        <thead className="display-4">
-          <TableHeading timeline={data.timeline}/>
-        </thead>
-        <DayList timeline={data.timeline} />
-      </table>
-      ) : (
-        null 
-      )}
+  console.log(timeline.date);
+  return(
+    <div>
+      { timeline.date ?
+        (
+          timeline.date.length !== 0 ?
+          (
+            (~(state.searchCriteria||null)&&data&&loggedIn) ? (
+            <table className="table px-3">
+              <thead className="display-4">
+                <TableHeading timeline={data.timeline}/>
+              </thead>
+              <DayList timeline={data.timeline} />
+            </table>
+            ) : (
+              null 
+            )
+          ):
+          (
+            <>
+              You do not have any saved entries. Add a meal or exercise.
+            </>
+          )
+        ):
+        (
+          <>
+            Loading your tracker...
+          </>
+        )
+      }
     </div>
-    )
-      };
+  )
+};
   
   
     export default Timeline;
