@@ -22,9 +22,16 @@ function Signup(props) {
     event.preventDefault();
 
     try {
-      const { data } = await addUser({
-        variables: { ...formState }
-      });
+      if(!formState.age || !formState.gender || !formState.height || !formState.weight) {
+        var { data } = await addUser({
+          variables: { email: formState.email, username: formState.username, password: formState.password, age: 27, gender: "M", height: 69, weight: 150 }
+        });
+      }
+      else {
+        var { data } = await addUser({
+          variables: { ...formState }
+        });
+      }
 
       Auth.login(data.addUser.token);
     } catch (e) {

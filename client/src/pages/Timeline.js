@@ -20,11 +20,12 @@ const keySchedule =  ({date})  => {
   return date.reduce((acc,curr)  => (acc[curr]='',acc),{}) 
 }
 
-const Timeline = () => {
+const Timeline = (refreshTimeline) => {
     const [state, dispatch] = useScheduleContext();
 
     // const { user } = state;
-    const { loading, error, data  } = useQuery(QUERY_TIMELINE);
+    const [newState, setNewState] = useState([]);
+    const { loading, error, data, refetch, networkStatus } = useQuery(QUERY_TIMELINE, { notifyOnNetworkStatusChange: true });
     const { data: userData } = useQuery(QUERY_ME_BASIC);
     // const timeline = data?.timeline || [];
     const loggedIn = Auth.loggedIn();
@@ -37,8 +38,11 @@ const Timeline = () => {
   
     // const loggedIn = Auth.loggedIn();
     useEffect(() => {
-      if(data) {
-          // console.log(data);
+      if ((newState !== refreshTimeline) && !loading) {
+        refetch();
+      }
+      setNewState(refreshTimeline);
+      if(!loading && data) {
         dispatch({
             type: UPDATE_TIMELINE,
             timeline: {data}
@@ -56,7 +60,8 @@ const Timeline = () => {
       //    });
       //   });
       // }
-    }, [timeline, loading]);
+    // }, [timeline, loading, networkStatus, refreshTimeline]);
+  }, [timeline, loading, networkStatus, refreshTimeline]);
 // const [state, dispatch] = useMealContext();
 // const {loading, error, data } = useQuery(QUERY_TIMELINE);
 // const [getTimeline, { data }] = useLazyQuery(QUERY_TIMELINE);
@@ -150,8 +155,8 @@ const Timeline = () => {
 //   console.log("Finished Loading");
 //   console.log(data);
 //   console.log(loggedIn);
-  console.log(data);
-  console.log(timeline.date);
+  // console.log(data);
+  // console.log(timeline.date);
   return(
     <div>
       { timeline.date ?
