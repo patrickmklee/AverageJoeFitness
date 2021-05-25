@@ -1,25 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { ADD_EXERCISE } from '../../utils/mutations';
 
 import { Form, FormGroup, Label, Input, Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
 
-const AddExercise = () => {
+const AddExercise = (props) => {
 
   const [date, setDate] = useState('');
   
   const [exerciseModal, setExerciseModal] = useState(false);
+
+  const [exerciseResponse, setExerciseResponse] = useState([]);
   
   const toggle = () => setExerciseModal(!exerciseModal);
 
   const [addExercise, { error }] = useMutation(ADD_EXERCISE)
+
+  useEffect(() => {
+    if (exerciseResponse.data) {
+      props.exerciseAdded(exerciseResponse)
+    }
+  }, [exerciseResponse]);
 
   async function handleFormSubmit(event) {
     event.preventDefault();
     event.stopPropagation();
 
     try {
-      await addExercise({
+      let exerciseData = await addExercise({
         variables: {
           date: document.getElementById("date-input").value, 
           time: document.getElementById("time-input").value,
@@ -27,6 +35,7 @@ const AddExercise = () => {
           duration: Math.floor(document.getElementById("duration-input").value)
         }
       });
+      setExerciseResponse(exerciseData);
     } catch (e) {
       console.error(e);
     }

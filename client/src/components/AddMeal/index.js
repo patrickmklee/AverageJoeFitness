@@ -10,7 +10,7 @@ import { Container, Card, CardBody, Form, FormGroup, Label, Input, Row, Col, But
 
 const getDisplayName = function(food) { return `${food.dataType === 'Branded' && food.brandName ? food.brandName : ''} ${food.lowercaseDescription}`}
 
-const AddMeal = () => {
+const AddMeal = (props) => {
 
   const [state, dispatch] = useScheduleContext();
   const { foods } = state;
@@ -25,6 +25,8 @@ const AddMeal = () => {
   const [addModal, setAddModal] = useState(false);
 
   const [currentFood, setCurrentFood] = useState({});
+
+  const [mealResponse, setMealResponse] = useState([]);
   
   const toggle = () => setMealModal(!mealModal);
 
@@ -34,15 +36,15 @@ const AddMeal = () => {
 
   useEffect(() => {
     async function fetchFoodData() {
-      // console.log('searchPage useEffect')
-      // console.log(state);
+      if (mealResponse.data) {
+        props.mealAdded(mealResponse)
+      }
       if (currentSearch !== '') {
         try {
           const response = await FdcSearchFood(process.env.REACT_APP_USDA_API_KEY, currentSearch);
           if (!response.ok) {
             throw new Error('something went wrong!');
           }
-          // console.log(response);
           const data = await response.json();
           dispatch({
             type: UPDATE_FOODS_RESULTS,
@@ -70,18 +72,14 @@ const AddMeal = () => {
     fetchFoodData();
 
 
-  }, [currentSearch, dispatch]);
+  }, [currentSearch, dispatch, mealResponse]);
 
   async function handleFormSubmit(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    // console.log(currentFood.foodNutrients.filter(function(nutrient) {
-    //   return nutrient.nutrientId == 1008;
-    // }));
-
     try {
-      await addMeal({
+      let mealData = await addMeal({
         variables: {
           date: document.getElementById("date-input").value, 
           time: document.getElementById("time-input").value,
@@ -91,8 +89,9 @@ const AddMeal = () => {
             return nutrient.nutrientId == 1008;
           })[0].value)
         }
-      });
-
+      })
+      setMealResponse(mealData);
+      
     } catch (e) {
       console.error(e);
     }
@@ -104,10 +103,7 @@ const AddMeal = () => {
     event.preventDefault();
     event.stopPropagation();
 
-    // console.log("TEST");
-
     if (!searchInput ||  (currentSearch===searchInput )){
-      // console.log("TEST");
       return false;
     } 
     setCurrentSearch(searchInput);
@@ -177,7 +173,7 @@ const AddMeal = () => {
                 />
               </Col>
             </FormGroup>
-            <Button color="danger" type="submit" className="mt-3">
+            <Button color="danger" type="submit" className="mt-3" onClick={ () => { props.mealAdded(mealResponse); } }>
               Submit
             </Button>
           </Form>
@@ -213,12 +209,10 @@ const AddMeal = () => {
                 <Col xs='12' md='12' className="mt-3">
                   <Card className="w-100" color='light'>
                     <CardHeader>{food.foodCategory}</CardHeader>
-                    {/* <CardHeader>{food.foodCategories}</CardHeader> */}
-                    {/* <CardHeader>FOOD</CardHeader> */}
+
                     <CardBody>
                       <CardTitle tag='h5'>{getDisplayName(food)}</CardTitle>
                       {NutrientList(food)}
-                      {/* <Button onClick={() => {setCurrentFood(food); toggleAdd(); console.log(currentFood.description);} }>Add to Meal</Button> */}
                       <Button onClick={() => {setCurrentFood(food); toggleAdd();} }>Add to Meal</Button>
 
                     </CardBody>

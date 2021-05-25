@@ -101,7 +101,7 @@ timelineSchema.path('date').schema.virtual('totalConsumedCalories').get(function
   // console.log(this.meal.reduce((total, obj) => obj.calories + total,0));
   return this.schedule.reduce((total, obj) =>
   {
-    (obj.mealTotalCalories ? obj.mealTotalCalories : 0) + total
+    return (obj.mealTotalCalories ? obj.mealTotalCalories : 0) + total
   }, 0);
 });
 
